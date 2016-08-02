@@ -1,0 +1,94 @@
+<?php
+/**
+ * @file
+ * Overrides core contact form functionality
+ */
+
+/**
+ * Implemented hook_form_alter()
+ * @param type $form
+ * @param string $form_state
+ * @param type $form_id
+ */
+function ajax_contact_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    case 'contact_site_form':
+      $form['#prefix'] = '<div id="_ajax_contact_contact_form">';
+      $form['#suffix'] = '</div>';
+
+      $form['#ajaxsubmit'] = TRUE;
+      $form['#submit'][] = 'ajax_contact_contact_site_form_submit';
+      // Include necessary files for the ajax callback.
+      $form_state['build_info']['files'] = array("_ajax_contact_contact_form" => drupal_get_path('module', 'contact') . "/contact.pages.inc");
+      // adjust the form to use ajax submit
+      $form['actions']['submit']['#ajax'] = array(
+          //'callback' => 'ajax_contact_contact_site_form_ajax_callback',
+          'wrapper' => '_ajax_contact_contact_form',
+          'method' => 'replace',
+          'effect' => 'fade',
+      );
+      break;
+  }
+}
+
+/**
+ * Submit handler for contact form.
+ * @param type $form
+ * @param type $form_state
+ */
+function ajax_contact_contact_site_form_submit($form, &$form_state) {
+  // rebuild the form after submitted successfully
+  $form_state['rebuild'] = TRUE;
+  // try this if you want to reset the form item values
+  $form_state['input'] = array();
+}
+
+/**
+ * Ajax callback for contact form.
+ * @param type $form
+ * @param type $form_state
+ * @return type
+ */
+function ajax_contact_contact_site_form_ajax_callback($form, &$form_state) {
+  //return $form;
+  //return 'hi';
+}
+
+/**
+ * Returns contact form.
+ * @return type
+ */
+function _ajax_contact_contact_form() {
+  module_load_include('inc', 'contact', 'contact.pages');
+  return drupal_get_form('contact_site_form');
+}
+
+/**
+ * Implemented hook_block_info().
+ * @return type
+ */
+function ajax_contact_block_info() {
+  $blocks['contact_form'] = array(
+      'info' => t('Contact Form Block'),
+      'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implemented hook_block_view().
+ * @param type $delta
+ * @return type
+ */
+function ajax_contact_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'contact_form':
+      $block['subject'] = '';
+      $block['content'] = _ajax_contact_contact_form();
+      break;
+  }
+  return $block;
+}

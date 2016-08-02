@@ -1,0 +1,796 @@
+<?php
+
+/**
+ * Implements template_preprocess_entity().
+ *
+ * Runs a entity specific preprocess function, if it exists.
+ */
+
+function cr_preprocess_entity(&$variables, $hook) {
+  $function = __FUNCTION__ . '_' . $variables['entity_type'];
+  if (function_exists($function)) {
+    $function($variables, $hook);
+  }
+}
+
+
+//custom function returning profile name
+function cr_profile($cr_uid) {
+	$profile = profile2_by_uid_load($cr_uid, 'carer');
+	$profile_name = '';
+	if($profile->pid) {
+		return $profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_surname_initial['und'][0]['value'];
+	} else {
+		//$profile = profile2_by_uid_load($cr_uid, 'carer_employer');
+    $profile = profile2_by_uid_load($cr_uid, 'employer');
+		if($profile->pid) {
+			return $profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_surname_initial['und'][0]['value'];
+		} else {
+      $profile = profile2_by_uid_load($cr_uid, 'agency');
+      if($profile->pid) {
+        return $profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_surname_initial['und'][0]['value'];
+      } else {
+        return false;
+      }
+		}
+	}
+}
+
+function cr_agency_name($aid) {
+  $profile = profile2_by_uid_load($aid, 'agency');
+  if($profile->pid) {
+    return $profile->field_company['und'][0]['value'];
+  } else {
+    return "";
+  }
+}
+
+//get node from employer
+function cr_employer_job($cr_uid) {
+  $nid = db_query("SELECT nid FROM {node} WHERE ((uid = :uid) AND (node.type IN ('job'))) ORDER BY created DESC LIMIT 1 OFFSET 0", array(":uid" => $cr_uid))->fetchField();
+  //dpm($nid);
+  return $nid;
+}
+
+function cr_count_agency_jobs($cr_uid) {
+  $count = db_query("SELECT COUNT(nid) FROM {node} WHERE ((uid = :uid) AND (node.type IN ('job'))) LIMIT 1 OFFSET 0", array(":uid" => $cr_uid))->fetchField();
+  return $count;
+}
+
+function cr_node_presave($node) {
+
+	if ($node->type == 'job') :
+
+		$pc = $node->field_address['und'][0]['postal_code'];
+
+		//$request = drupal_http_request('http://api.postcodes.io/outcodes/' . $pc1);
+		$request = drupal_http_request('http://api.postcodes.io/postcodes/' . $pc);
+		$data = drupal_json_decode($request->data);
+
+		if(isset($data['result'])) {
+			$result = $data['result'];
+			$district = $result['admin_district'];
+		} else {
+			$district = 'Not known';
+			drupal_set_message(t('The post code you entered was not valid'), 'error');
+		}
+
+		$node->field_district['und'][0]['value'] = $district;
+
+  //set the carer field in the message based on whether the carer is the sender or the receiver
+  elseif ($node->type == 'message') :
+    if(!isset($node->field_carer['und'][0]['target_id'])) :
+      //is the carer the message recipient?
+      $cid = $node->field_to['und'][0]['target_id'];
+      $carer = user_load($cid);
+      if (in_array('carer', $carer->roles)) :
+        $node->field_carer['und'][0]['target_id'] = $cid;
+      else:
+        //is the carer the message sender?
+        $cid = $node->uid;
+        $carer = user_load($cid);
+        if (in_array('carer', $carer->roles)) :
+          $node->field_carer['und'][0]['target_id'] = $cid;
+        endif;
+      endif;
+		endif;
+    //is this message to an agency?
+    $to = $node->field_to['und'][0]['target_id'];
+    $to_user = user_load($to);
+    if (in_array('agency', $to_user->roles)) :
+    	$profile = profile2_by_uid_load($to, 'agency');
+      $node->field_agency['und'][0]['value'] = $profile->field_company['und'][0]['value'];
+    endif;
+	endif;
+}
+
+//Update profile
+function cr_profile2_update($profile) {
+  global $user;
+
+  //set first and last name on user account
+
+  $obj = entity_metadata_wrapper('user', $user);
+
+  if(!array_key_exists('und', $obj->field_last_name_em)) {
+    $obj->field_last_name_em = $profile->field_last_name_em['und'][0]['value'];
+    $obj->field_first_name_em = $profile->field_first_name_em['und'][0]['value'];
+    $obj->field_surname_initial = substr($profile->field_last_name_em['und'][0]['value'], 0, 1);
+    $obj->save();
+  }
+}
+
+//Set value of hidden district field from postcode lookup api
+function cr_profile2_presave($profile) {
+
+  global $user;
+
+  //set first and last name on user account
+  $obj = entity_metadata_wrapper('user', $user);
+  $obj->field_last_name_em = $profile->field_last_name_em['und'][0]['value'];
+  $obj->field_first_name_em = $profile->field_first_name_em['und'][0]['value'];
+  $obj->field_surname_initial = substr($profile->field_last_name_em['und'][0]['value'],0,1);
+  $obj->save();
+
+	if ($profile->type == 'carer') :
+
+		$pc = $profile->field_address['und'][0]['postal_code'];
+		//$request = drupal_http_request('http://api.postcodes.io/outcodes/' . $pc1);
+		$request = drupal_http_request('http://api.postcodes.io/postcodes/' . $pc);
+		$data = drupal_json_decode($request->data);
+
+		if(isset($data['result'])) {
+			$result = $data['result'];
+			$district = $result['admin_district'];
+		} else {
+			$district = 'Not known';
+			drupal_set_message(t('The post code you entered was not valid'), 'error');
+		}
+
+		$profile->field_district['und'][0]['value'] = $district;
+		$profile->field_surname_initial['und'][0]['value'] = substr($profile->field_last_name_em['und'][0]['value'],0,1);
+
+/*
+		if (strlen($pc) > 3) :
+			if (strpos($pc, ' ') !== false) :
+				$pc1 = stristr($pc, ' ', true);
+			else :
+				$pc1 = substr($pc, 0, 4);
+			endif;
+
+			//start
+			$url = 'http://example.com';
+			$data = array(
+			'key1' => $value1,
+			'key2' => $value2,
+			);
+
+			$full_url = url($url, array('query' => $data));
+			drupal_http_request($full_url);
+			*/
+		//$lat = $result['latitude'];
+		//end
+			//$profile->field_general_location['und'][0]['value'] = $pc1;
+		//endif;
+
+	//elseif ($profile->type == 'carer_employer'):
+  elseif ($profile->type == 'employer' || $profile->type == 'agency'):
+		$profile->field_surname_initial['und'][0]['value'] = substr($profile->field_last_name_em['und'][0]['value'],0,1);
+	endif;
+}
+
+//show correct view mode to user
+function cr_entity_view_mode_alter(&$view_mode, $context) {
+  global $user;
+  //print_r(user_roles());
+
+  if ($context['entity_type'] == 'profile2'){
+    //dpm($context);
+    if($context['entity']->type == 'carer') {
+      //only show the full page view to the profile author
+      if($user->uid == $context['entity']->uid) {
+        $view_mode = 'page';
+      } else {
+      //if(count(array_intersect(array('agency', 'employer'), array_values($user->roles)))>0) {
+        //if (in_array(array('agency', ''), $user->roles)) {
+        $view_mode = 'carer_details_employer';
+        //$context['entity']->label = 'hi <i class="fa fa-user"></i> ' . $context['entity']->field_first_name_em['und'][0]['value'] . ' ' . $context['entity']->field_last_name_em['und'][0]['value'];
+        $context['entity']->label = 'Carer Details for ' . $context['entity']->field_first_name_em['und'][0]['value'] . ' ' . $context['entity']->field_last_name_em['und'][0]['value'];
+      }
+    } elseif($context['entity']->type == 'agency' && $user->uid == $context['entity']->uid) {
+      $view_mode = 'agency';
+    }
+  }
+
+  if ($context['entity_type'] == 'node' && $context['entity']->type == 'job'){
+    //is it an agency job?
+    //dpm($context['entity']);
+    if (isset($context['entity']->field_agency_job['und'][0]['value'])) {
+      if ($context['entity']->field_agency_job['und'][0]['value'] == 'Yes') {
+
+        // if they are an agency
+        if (in_array('agency', $user->roles)) {
+
+          // are they the author?
+          if ($context['entity']->uid == $user->uid) {
+            $view_mode = 'job_details_agency_view';
+          } else {
+            $view_mode = 'job_details_agency_';
+          }
+        } else {
+          $view_mode = 'job_details_agency_';
+        }
+
+        // it is a non agency job
+      } else {
+
+        // if they are a carer or an agency
+        if (in_array('carer', $user->roles) || in_array('agency', $user->roles)) {
+          $view_mode = 'job_details_carer';
+
+          //do not show full content unless they are the author
+        } elseif (in_array('employer', $user->roles) && $context['entity']->uid == $user->uid) {
+          $view_mode = 'full';
+        } else {
+          $view_mode = 'job_details_carer';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function cr_form_alter(&$form, $form_state, $form_id) {
+  switch ($form_id) {
+    //change create message notification
+    case 'message_node_form':
+      $form['actions']['submit']['#submit'][0] = 'cr_node_form_submit';
+
+      $current_user = user_uid_optional_load();
+      //hide carer field on message form from non admins
+      $check = array_intersect(array('administrator'), array_values($current_user->roles));
+      if (empty($check) ? FALSE : TRUE) :
+       // is admin
+      else :
+        $form['field_carer']['#access'] = FALSE;
+      endif;
+
+      break;
+    case 'comment_node_message_form':
+      //dpm($form);
+      $form['actions']['submit']['#value'] = 'Send';
+      break;
+	  case 'user_login':
+	    drupal_set_title(t('Log In'));
+      break;
+	  case 'user_pass':
+  	  drupal_set_title(t('Request New Password'));
+      break;
+    case 'user_register_form':
+      $form['#attributes']['class'][] = 'user-register';
+      break;
+    case "views_exposed_form" :
+      if (isset($form['field_geofield_distance'])) :
+        $form['field_geofield_distance']['#origin_options']['#attributes'] = array('placeholder' => array(t('Eg: your postcode')));
+      endif;
+      break;
+    case "stripe_subscription_subscription_form" :
+      $form['#submit'][]= 'cr_stripe_form_submit';
+      break;
+    case "stripe_subscription_subscription_cancel_form" :
+      $form['#submit'][]= 'cr_stripe_cancel_form_submit';
+      break;
+    case "contact_site_form";
+      $form['#submit'][]= 'cr_modal_contact_form_submit';
+      break;
+    case "user_cancel_confirm_form" :
+      //$form['#submit'][]= 'cr_user_cancel_form_submit';
+      $form['description']['#markup']='Your account will be removed and all account information deleted. All of your content will also be deleted. This action cannot be undone.
+        <br><br>We will send you an email to confirm your account cancellation. Please click on the link in the email to confirm you wish to cancel your account.';
+      $form['actions']['submit']['#submit'][0] = 'cr_user_cancel_form_submit';
+      break;
+	}
+}
+
+//add stripe subscription to employer register form
+function cr_form_user_register_form_alter(&$form, &$form_state) {
+  require_once drupal_get_path('module', 'stripe_subscription') . '/stripe_subscription.pages.inc';
+  require_once drupal_get_path('module', 'stripe_subscription') . '/stripe_subscription.module';
+  if (arg(0) == 'employer' && user_is_anonymous()) {
+    // Add the subscription form to the bottom of the registration form.
+    $form = stripe_subscription_subscription_form($form, $form_state);
+  }
+}
+
+//redirect carers on subscription to carer membership confirmation page
+function cr_stripe_form_submit($form, &$form_state) {
+  //dpm($form);
+  //dpm($form_state);
+
+  if($form_state['values']['plan_id']=='carer_membership' && $form_state['values']['new_subscription'] == TRUE) {
+    unset($_REQUEST['destination']);
+    unset($form['#redirect']);
+    $form_state['redirect'] = 'carer-membership-confirmation';
+  }
+}
+
+function cr_modal_contact_form_submit($form, &$form_state) {
+  //dpm($form);
+  //dpm($form_state);
+
+  //if($form_state['values']['plan_id']=='carer_membership' && $form_state['values']['new_subscription'] == TRUE) {
+    unset($_REQUEST['destination']);
+    unset($form['#redirect']);
+    $form_state['redirect'] = 'carer-membership-confirmation';
+  //}
+}
+
+function cr_stripe_cancel_form_submit($form, &$form_state) {
+  unset($_REQUEST['destination']);
+  unset($form['#redirect']);
+  $form_state['redirect'] = 'subscription/cancelled';
+}
+
+function cr_user_cancel_form_submit($form, &$form_state) {
+  global $user;
+  $account = $form_state['values']['_account'];
+
+  // Cancel account immediately, if the current user has administrative
+  // privileges, no confirmation mail shall be sent, and the user does not
+  // attempt to cancel the own account.
+
+  if (user_access('administer users') && empty($form_state['values']['user_cancel_confirm']) && $account->uid != $user->uid) {
+    user_cancel($form_state['values'], $account->uid, $form_state['values']['user_cancel_method']);
+
+    $form_state['redirect'] = 'admin/people';
+  }
+  else {
+    // Store cancelling method and whether to notify the user in $account for
+    // user_cancel_confirm().
+    if(stripe_subscription_has_active_plan($account->uid) == true) {
+      $link = l("cancel your membership", 'subscription');
+      drupal_set_message(t("Please $link before cancelling your account"),'error');
+    } else {
+      $edit = array(
+          'user_cancel_method' => $form_state['values']['user_cancel_method'],
+          'user_cancel_notify' => $form_state['values']['user_cancel_notify'],
+      );
+      $account = user_save($account, $edit);
+      _user_mail_notify('cancel_confirm', $account);
+      drupal_set_message(t('A confirmation request to cancel your account has been sent to your e-mail address.'));
+      watchdog('user', 'Sent account cancellation request to %name %email.', array('%name' => $account->name, '%email' => '<' . $account->mail . '>'), WATCHDOG_NOTICE);
+
+      $form_state['redirect'] = "user/$account->uid";
+
+    }
+  }
+}
+
+
+//function used to change system message for creating messages
+function cr_node_form_submit($form, &$form_state) {
+  $node = node_form_submit_build_node($form, $form_state);
+  $insert = empty($node->nid);
+  node_save($node);
+  $node_link = l(t('view'), 'node/' . $node->nid);
+  $watchdog_args = array('@type' => $node->type, '%title' => $node->title);
+  $t_args = array('@type' => node_type_get_name($node), '%title' => $node->title);
+
+  if ($insert) {
+	  if ($node->type == 'message') {
+      watchdog('content', '@type: added %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+      drupal_set_message(t('The message has been sent.', $t_args));
+    }
+    else {
+      watchdog('content', '@type: added %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+      drupal_set_message(t('@type %title has been created.', $t_args));
+    }
+  }
+  else {
+    watchdog('content', '@type: updated %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+    drupal_set_message(t('@type %title has been updated.', $t_args));
+  }
+  if ($node->nid) {
+    $form_state['values']['nid'] = $node->nid;
+    $form_state['nid'] = $node->nid;
+    $form_state['redirect'] = node_access('view', $node) ? 'node/' . $node->nid : '<front>';
+  }
+  else {
+    // In the unlikely case something went wrong on save, the node will be
+    // rebuilt and node form redisplayed the same way as in preview.
+    drupal_set_message(t('The post could not be saved.'), 'error');
+    $form_state['rebuild'] = TRUE;
+  }
+  // Clear the page and block caches.
+  cache_clear_all();
+}
+
+
+//custom greeting block
+function cr_block_info() {
+
+  $blocks['greeting'] = array(
+      'info' => t('user greeting'),
+      'status' => TRUE,
+      'region' => 'header',
+      'weight' => 0,
+      'visilibty' => 1,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cr_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'greeting':
+      $block['subject'] = '';
+      $block['content'] = _cr_block_content();
+      break;
+  }
+  return $block;
+}
+
+function _cr_block_content() {
+  global $user;
+  $cr_user = cr_profile($user->uid);
+
+  if($cr_user) :
+    $output = t('Hello ' . $cr_user . ' (' . $user->name . ')');
+  else :
+    $output = t('Hello ' . $user->name);
+  endif;
+  return $output;
+}
+
+//unset options in proximity filter to not include yards, metres etc
+function cr_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['field_geofield_distance'])) {
+    // $existing =
+    $form['field_geofield_distance']['#process'] = array(
+        'geofield_proximity_element_process',
+        'cr_proximity_element_process');
+  }
+}
+
+function cr_proximity_element_process($element, &$form_state, $form) {
+  $element['unit']['#options'] = array(
+      GEOFIELD_MILES => t('Miles'),
+      GEOFIELD_KILOMETERS => t('Kilometers'));
+  return $element;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+//add renew membership button to membership status page - uses different paths for different roles
+function cr_views_pre_render(&$view) {
+
+  global $user;
+  //dpm($view->field['field_company']);
+  //dpm($view);
+
+  // dpm($view); // dpm view here to see its properties.
+  // and replace $view->name and $view->current_display with actual values from your view.
+  // Note that my example uses Global: Text area for header, that's why I use $view->header['area'].
+  // Other options available for header have different names. Try to find one that you use.
+  if ($view->name == 'license' && $view->current_display = 'page') {
+
+    if (in_array('carer', $user->roles)) :
+      $link = "/carer-membership";
+    elseif (in_array('employer', $user->roles)) :
+      $link = "/employer-membership";
+    elseif (in_array('agency', $user->roles)) :
+      $link = "/agency-membership";
+    endif;
+
+    $content = l(t('Show My Orders'), "/user/orders", array('attributes' => array('class' => array('btn', 'btn-primary'))));
+
+    if($link) :
+      //$view->header['area']->options['content'] = l(t('Renew membership'), $link, array('attributes' => array('class' => array('btn', 'btn-success'))));
+      $content .= " " . l(t('Renew membership'), $link, array('attributes' => array('class' => array('btn', 'btn-success', 'renew')))) . " ";
+    endif;
+
+    $view->header['area']->options['content'] = $content;
+  }
+
+  //for agency jobs list add custom title and remove Add Job link if their membership is not active
+  // Or if they have reached their node limit
+  elseif ($view->name == 'agency_jobs_list' && $view->current_display = 'page') {
+    $view->build_info['title'] = ucfirst(cr_agency_name($user->uid)) . ' Jobs';
+    $check = array_intersect(array('agency bronze','agency silver','agency gold'), array_values($user->roles));
+    $limit = 0;
+    foreach($user->roles as $role) {
+      switch($role) {
+        case "agency bronze":
+          $limit = 10;
+          break;
+        case "agency silver":
+          $limit = 25;
+          break;
+        case "agency gold":
+          $limit = 50;
+          break;
+      }
+    }
+    $count = cr_count_agency_jobs($user->uid);
+    if (empty($check)) {
+      $view->header['area']->options['content'] = '';
+    }
+    elseif ($count >= $limit) {
+      $view->header['area']->options['content'] = '<div class="note">You cannot create any new jobs as you have reached your job limit. <br>You can change your membership plan, if you need to create more jobs, at the <a class="bold" href="/subscription">membership page</a>.</div>';
+    }
+  }
+}
+
+
+/**
+ * Create special menu item for employers to go to their jobs page **
+ */
+function cr_menu() {
+  $items = array();
+
+  $items['job/%user/%job'] = array(
+      'title' => 'My Job',
+      'page callback' => '_getpage',
+      'access callback' => '_check_role',
+      'expanded' => TRUE,
+      'weight' => -50,
+      'menu_name' => 'user-menu',
+  );
+
+  return $items;
+}
+
+function _check_role() {
+  global $user;
+  return (in_array('employer', $user->roles)) ? TRUE : FALSE;
+}
+
+function _getpage($node_id) {
+  $node = menu_get_object('node',1);
+  return node_page_view($node);
+}
+
+
+function job_to_arg($arg1) {
+  global $user;
+  $nid = cr_employer_job($user->uid);
+  return $nid;
+}
+/**
+ * End create special menu item for employers to go to their jobs page **
+ */
+
+
+
+
+/*
+function cr_form_alter(&$form, $form_state, $form_id) {
+  if($form_id == 'user_register_form')
+  //dpm($form);
+  {
+    //$form['account']['mail']['#description'] = t('My description');
+	 //$form['account']['#weight'] = -20;
+  }
+}
+*/
+
+/**
+ * Theme function override for multiple-value form widgets.
+ *
+ * @see theme_field_multiple_value_form()
+ */
+function cr_theme_field_multiple_value_form($variables) {
+  $element = $variables['element'];
+  $output = '';
+
+  // The first condition is the override.
+  if (($element['#cardinality'] > 1 || $element['#cardinality'] == FIELD_CARDINALITY_UNLIMITED) && isset($element[0]['#nodrag'])) {
+    $table_id = drupal_html_id($element['#field_name'] . '_values');
+    $required = !empty($element['#required']) ? theme('form_required_marker', $variables) : '';
+
+    $header = array(
+        array(
+            'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
+            'class' => array('field-label'),
+        ),
+    );
+    $rows = array();
+
+    // Sort items according to weight
+    $items = array();
+    foreach (element_children($element) as $key) {
+      if ($key === 'add_more') {
+        $add_more_button = &$element[$key];
+      }
+      else {
+        $items[] = &$element[$key];
+      }
+    }
+    usort($items, '_field_sort_items_value_helper');
+
+    // Add the items as table rows.
+    foreach ($items as $key => $item) {
+      // We don't want the weight to render.
+      unset($item['_weight']);
+      $cells = array(
+          drupal_render($item),
+      );
+      $rows[] = array(
+          'data' => $cells,
+      );
+    }
+
+    $output = '<div class="form-item">';
+    $output .= theme('table', array(
+        'header' => $header,
+        'rows' => $rows,
+        'attributes' => array(
+            'id' => $table_id,
+            'class' => array('field-multiple-table'),
+        ),
+    ));
+    $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
+    $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
+    $output .= '</div>';
+  }
+  elseif ($element['#cardinality'] > 1 || $element['#cardinality'] == FIELD_CARDINALITY_UNLIMITED) {
+    //dpm($element);
+    $table_id = drupal_html_id($element['#field_name'] . '_values');
+    $order_class = $element['#field_name'] . '-delta-order';
+    $required = !empty($element['#required']) ? theme('form_required_marker', $variables) : '';
+
+    $header = array(
+        array(
+            'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
+            'colspan' => 2,
+            'class' => array('field-label'),
+        ),
+        t('Order'),
+    );
+    $rows = array();
+
+    // Sort items according to '_weight' (needed when the form comes back after
+    // preview or failed validation).
+    $items = array();
+    foreach (element_children($element) as $key) {
+      if ($key === 'add_more') {
+        $add_more_button = &$element[$key];
+      }
+      else {
+        $items[] = &$element[$key];
+      }
+    }
+    usort($items, '_field_sort_items_value_helper');
+
+    // Add the items as table rows.
+    foreach ($items as $key => $item) {
+      $item['_weight']['#attributes']['class'] = array($order_class);
+      $delta_element = drupal_render($item['_weight']);
+      $cells = array(
+          array(
+              'data' => '',
+              'class' => array('field-multiple-drag'),
+          ),
+          drupal_render($item),
+          array(
+              'data' => $delta_element,
+              'class' => array('delta-order'),
+          ),
+      );
+      $rows[] = array(
+          'data' => $cells,
+          'class' => array('draggable'),
+      );
+    }
+
+    $output = '<div class="form-item">';
+    $output .= theme('table', array(
+        'header' => $header,
+        'rows' => $rows,
+        'attributes' => array(
+            'id' => $table_id,
+            'class' => array('field-multiple-table'),
+        ),
+    ));
+    $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
+    $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
+    $output .= '</div>';
+
+    drupal_add_tabledrag($table_id, 'order', 'sibling', $order_class);
+  }
+  else {
+    foreach (element_children($element) as $key) {
+      $output .= drupal_render($element[$key]);
+    }
+  }
+
+  return $output;
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function cr_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (isset($element['#field_name'])) {
+    switch ($element['#field_name']) {
+      case 'field_qualifications':
+        $element['#nodrag'] = TRUE;
+      default:
+        break;
+      //case 'field_qualifications':
+      //  $element['#nodrag'] = TRUE;
+      //default:
+      //  break;
+    }
+  }
+}
+
+
+
+/**
+ * Implements hook_init().
+ */
+/*
+ // This function seems to break cr_preprocess_html on the template file
+function cr_init() {
+  global $theme_key;
+  if (strpos($theme_key, 'bootstrap')===FALSE) {
+    include_once(drupal_get_path('theme', 'bootstrap') . '/includes/process.inc');
+  }
+}
+*/
+
+
+/*
+function cr_menu_alter(&$items) {
+	//$items['cart']['access callback'] = 'user_is_logged_in';
+}
+
+function cr_node_submit($node, $form, &$form_state) {
+  // Decompose the selected menu parent option into 'menu_name' and 'plid', if
+  // the form used the default parent selection widget.
+  drupal_get_messages();
+  if (isset($_SESSION['messages']['status'])) {
+    unset($_SESSION['messages']['status']);
+  }
+  drupal_set_message('The message has been sent.', 'status');
+  watchdog('hi','hi');
+}
+
+function cr_form_message_node_form_alter(&$form, $form_state, $form_id) {
+   //$form['buttons']['submit']['#submit'][0] = 'cr_node_form_submi';
+   unset($form['buttons']['submit']['#submit'][0]);
+  watchdog('test','testTEST');
+  dpm($form);
+}
+
+function cr_form_comment_form_alter(&$form, &$form_state) {
+    //unset($form['author']['name']);
+}
+*/
+
+/**
+ * Profile2 specific implementation of template_preprocess_entity().
+ */
+/*
+function cr_preprocess_entity_profile2(&$variables, $hook) {
+  $function = __FUNCTION__ . '_' . $variables['entity_type'];
+  if (function_exists($function)) {
+    $function($variables, $hook);
+  }
+
+	dpm($variables);
+}
+
+function cr_preprocess_profile2(&$variables)  {
+	//dpm($variables);
+	//print 'hello';
+}
+
+*/

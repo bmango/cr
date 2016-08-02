@@ -1,0 +1,33 @@
+Inspect 7.x-6.5
+
+
+Main issues
+-----------
+Ordinary maintenance.
+
+Notice: deprecated class and functions removed
+----------------------------------------------
+- Removed class InspectTrace, which has been deprecated and whose methods has
+  logged warning on call since version 7.x-6.0 (5 versions, 18 months ago).
+- Removed functions inspect_args, inspect_args_get, inspect_constants,
+  inspect_constants_get - which all have been deprecated and logged warning
+  on call since version 7.x-6.0 (5 versions, 18 months ago).
+
+New features
+------------
+- Don't set/get cookie in CLI mode.
+- Session counting is not important enough to risk PHP warning due to response
+  body sending already commenced.
+
+Bug fixes
+---------
+- Bad type in frontend .errorHandler(); literal 'messsage' (3 x 's') made for
+  empty output (issue #2536818).
+
+Security
+--------
+None.
+
+Install/update notes
+--------------------
+- Clear cache.

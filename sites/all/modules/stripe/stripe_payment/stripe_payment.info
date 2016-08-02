@@ -1,0 +1,16 @@
+name = Stripe Payment method
+description = Integration of the Stripe payment gateway into the Payment Method.
+package = Stripe
+core = 7.x
+
+dependencies[] = payment
+dependencies[] = stripe
+
+files[] = includes/StripePaymentMethodController.inc
+
+; Information added by Drupal.org packaging script on 2016-03-14
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "stripe"
+datestamp = "1457973149"
+

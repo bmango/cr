@@ -1,0 +1,6 @@
+name = Ajax Contact
+description = "Extends contact module "
+package = Core - alteration
+version = VERSION
+core = 7.x
+files[] = ajax_contact.module
