@@ -447,7 +447,7 @@ function stripe_subscription_stripe_webhook($event) {
 
       //May need to add some code to check that the webhook only runs once and does not send out duplicate emails
       rules_invoke_event('stripe_subscription_event', $uid, $plan, $action, $amount, $renewal);
-      watchdog('debug-subscription-created', '<pre>'. print_r($event->data->object, TRUE) .'</pre>');
+      //watchdog('debug-subscription-created', '<pre>'. print_r($event->data->object, TRUE) .'</pre>');
 
       break;
 
@@ -477,7 +477,7 @@ function stripe_subscription_stripe_webhook($event) {
       $renewal = '';
 
       rules_invoke_event('stripe_subscription_event', $uid, $plan, $action, $amount, $renewal);
-      watchdog('debug-subscription-deleted', '<pre>'. print_r($event->data->object, TRUE) .'</pre>');
+      //watchdog('debug-subscription-deleted', '<pre>'. print_r($event->data->object, TRUE) .'</pre>');
       //watchdog('debug', 'vars: %s', array('%s' => $params), WATCHDOG_DEBUG);
       //watchdog('stripe_subscription','Values: ' . print_r($params));
 
@@ -1208,4 +1208,3 @@ function stripe_subscription_mail($key, &$message, $params) {
 function stripe_subscription_access($uid) {
   return (($GLOBALS['user']->uid == $uid && user_access('manage own subscription')) || user_access('manage any subscription')) && $uid > 0;
 }
-

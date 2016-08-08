@@ -1738,7 +1738,7 @@ function views_debug($message, $placeholders = array()) {
     }
     else {
       $output = empty($output) ? t($message, $placeholders) : $output;
-      dpm($output);
+      //dpm($output);
     }
   }
   elseif (isset($GLOBALS['drupal_test_info'])) {
@@ -1759,7 +1759,7 @@ function vpr($message, $placeholders = array()) {
  */
 function vsm($message) {
   if (module_exists('devel')) {
-    dpm($message);
+    //dpm($message);
   }
 }
 
