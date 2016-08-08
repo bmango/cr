@@ -16,3 +16,6 @@ workspace.xml
 *.tar.gz
 .htaccess
 robots.txt
+gulpfile.js
+package.json
+php.ini
