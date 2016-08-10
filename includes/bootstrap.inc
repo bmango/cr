@@ -1786,6 +1786,7 @@ function drupal_set_message($message = NULL, $type = 'status', $repeat = TRUE) {
     $message .= '<pre>'. print_r(debug_backtrace(), 1) .'</pre>';
  }
 */
+  
 
 
   if ($message || $message === '0' || $message === 0) {
