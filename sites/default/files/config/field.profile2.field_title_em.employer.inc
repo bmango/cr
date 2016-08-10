@@ -126,7 +126,9 @@ Dr|Dr',
   ),
 );
 
-$dependencies = array();
+$dependencies = array(
+  'profile2_type.employer' => 'profile2_type.employer',
+);
 
 $optional = array();
 

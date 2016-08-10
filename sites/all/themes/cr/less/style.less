@@ -7,7 +7,7 @@
 @import 'mixins';
 
 body {
-	//background:#fff; 
+	//background:#666;
 	font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height:1.5; 
 	//font-size:15px;
@@ -25,6 +25,11 @@ body {
 
 h4, h3 {
   line-height:1.2;
+}
+
+.front img {
+	max-width: 100%;
+	height: auto !important;
 }
 
 .field .field-label {
@@ -1205,6 +1210,10 @@ ul.tabs--primary {
 .view-mode-carer_details_employer {
 	.field-name-employer-carers-links {
 		float:left;
+
+		.role-agency & {
+			display: none;
+		}
 		
 		.field-items {
 			margin:15px 0;
@@ -1236,6 +1245,10 @@ ul.tabs--primary {
 				float: left;
 				font-weight: 500;
 				font-size:1.2em;
+			}
+
+			.field-name-dummy-personal-details {
+				display: none;
 			}
 
 			.field-name-send-message {
@@ -1672,11 +1685,16 @@ footer.footer {
       margin:0;
       padding:0;
       list-style:none;
+			//float: left;
       
       a {
         color:darken(@main-brand, 40%);
       }
     }
+
+		#social-media {
+			//float: right;
+		}
   }
 
 	.copyright {
@@ -1988,4 +2006,12 @@ div.title-wrapper {
 
 .title-wrapper {
 	background-size: 50% 50% !important;
+}
+
+.view-id-care_receiver_details_profile h2 {
+	display: none;
+}
+
+.cr-user-login-form-wrapper .captcha {
+	margin-bottom: 15px;
 }

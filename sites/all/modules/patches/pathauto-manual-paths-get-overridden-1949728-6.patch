@@ -1,0 +1,13 @@
+diff --git a/pathauto.module b/pathauto.module
+index 0baf1e0..4156329 100644
+--- a/pathauto.module
++++ b/pathauto.module
+@@ -628,7 +628,7 @@ function pathauto_node_operations() {
+  */
+ function pathauto_node_update_alias(stdClass $node, $op, array $options = array()) {
+   // Skip processing if the user has disabled pathauto for the node.
+-  if (isset($node->path['pathauto']) && empty($node->path['pathauto'])) {
++  if ((isset($node->path['pathauto']) && empty($node->path['pathauto'])) || !isset($node->path['pathauto'])) {
+     return;
+   }
+ 

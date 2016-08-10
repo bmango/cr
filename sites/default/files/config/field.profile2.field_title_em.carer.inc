@@ -152,7 +152,9 @@ Dr|Dr',
   ),
 );
 
-$dependencies = array();
+$dependencies = array(
+  'profile2_type.carer' => 'profile2_type.carer',
+);
 
 $optional = array();
 

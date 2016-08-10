@@ -124,7 +124,9 @@ $data = array(
   ),
 );
 
-$dependencies = array();
+$dependencies = array(
+  'profile2_type.agency' => 'profile2_type.agency',
+);
 
 $optional = array();
 

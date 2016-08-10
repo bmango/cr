@@ -1,0 +1,186 @@
+diff --git a/stripe_subscription.admin.inc b/stripe_subscription.admin.inc
+index 5352641..b894c1b 100644
+--- a/stripe_subscription.admin.inc
++++ b/stripe_subscription.admin.inc
+@@ -346,7 +346,7 @@ function stripe_subscription_admin_plans_edit($form, $form_state, $plan_id = NUL
+ 
+   if (isset($plan_id) && $plan_id != 'add') {
+     try {
+-      $plan = Stripe_Plan::retrieve($plan_id);
++      $plan = \Stripe\Plan::retrieve($plan_id);
+       drupal_set_title('Edit Stripe Plan: ' . $plan->name);
+       drupal_set_message('You may only update the name of a plan.', 'warning');
+     }
+@@ -479,14 +479,14 @@ function stripe_subscription_admin_plans_edit_validate($form, &$form_state) {
+ 
+   try {
+     if ($form_state['values']['existing'] == 1) {
+-      $p = Stripe_Plan::retrieve($plan_data['id']);
++      $p = \Stripe\Plan::retrieve($plan_data['id']);
+       if ($p->name != $plan_data['name']) {
+         $p->name = $plan_data['name'];
+         $p->save();
+       }
+     }
+     else {
+-      Stripe_Plan::create($plan_data);
++      \Stripe\Plan::create($plan_data);
+     }
+   }
+   catch (Exception $e) {
+@@ -634,6 +634,7 @@ function stripe_subscription_admin_plan_group_remove_submit(&$form, &$form_state
+  * Role assignment form
+  */
+ function stripe_subscription_admin_plans_roles($form, &$form_state, $plan_id) {
++  $library = libraries_load('stripe');
+   $plan = NULL;
+   $secret = stripe_get_key("secret");
+   $publishable = stripe_get_key("publishable");
+@@ -647,7 +648,7 @@ function stripe_subscription_admin_plans_roles($form, &$form_state, $plan_id) {
+ 
+   if (!isset($error)) {
+     try {
+-      $plan = Stripe_Plan::retrieve($plan_id);
++      $plan = \Stripe\Plan::retrieve($plan_id);
+       drupal_set_title('Stripe Plan Roles: ' . $plan->name);
+     }
+     catch (Exception $e) {
+diff --git a/stripe_subscription.module b/stripe_subscription.module
+index dc0f32a..e1631c0 100644
+--- a/stripe_subscription.module
++++ b/stripe_subscription.module
+@@ -29,8 +29,7 @@ function stripe_subscription_permission() {
+   $perms = array();
+   if (($library = libraries_load('stripe')) && !empty($library['loaded'])) {
+     try {
+-      $plans = Stripe_Plan::all();
+-
++      $plans = \Stripe\Plan::all();
+       foreach ($plans->data as $plan) {
+         $perms['subscribe: ' . $plan->id] = array(
+           'title' => 'Subscribe to: ' . $plan->name,
+@@ -222,7 +221,8 @@ function stripe_subscription_cron() {
+   foreach ($result as $row) {
+     try {
+       // Confirm local data is still valid by retreiving the customer record
+-      $customer = Stripe_Customer::retrieve($row->customer_id);
++//Stripe_Customer::retrieve
++      $customer = \Stripe\Customer::retrieve($row->customer_id);
+       if (isset($customer->subscription) &&
+         $customer->subscription->current_period_end >= $start &&
+         $customer->subscription->current_period_end < $end &&
+@@ -402,19 +402,19 @@ function stripe_subscription_tokens($type, $tokens, $data = array(), $options =
+  */
+ function stripe_subscription_stripe_webhook($event) {
+   $livemode = stripe_subscription_live() ? 1 : 0;
+-  switch ($event->type) {
++   switch ($event->type) {
+     case 'customer.created':
+-      stripe_subscription_sync_customer($event->data->object->customer);
++      stripe_subscription_sync_customer($event->data->object);
+       break;
+ 
+     case 'customer.updated':
+-      stripe_subscription_sync_customer($event->data->object->customer);
++      stripe_subscription_sync_customer($event->data->object);
+       break;
+ 
+     case 'customer.deleted':
+       db_delete('stripe_customers')
+         ->condition('livemode', $livemode)
+-        ->condition('customer_id', $event->data->object->customer->id)
++        ->condition('customer_id', $event->data->object->id)
+         ->execute();
+       break;
+ 
+@@ -434,7 +434,7 @@ function stripe_subscription_stripe_webhook($event) {
+     case 'customer.subscription.deleted':
+       $uid = stripe_subscription_get_uid_from_customer_id($event->data->object->customer);
+       stripe_subscription_set_roles('unsubscribe', $event->data->object->plan->id, $uid);
+-      stripe_subscription_sync_customer($event->data->object->customer);
++      stripe_subscription_sync_customer($event->data->object->customer,$uid);
+       // Send subscription cancelled confirmation
+       $params = array();
+       $params['account'] = user_load($uid);
+@@ -647,7 +647,7 @@ function stripe_subscription_subscription_form($form, &$form_state, $uid = NULL)
+   }
+   elseif ($available_plan_count > 0) {
+     $default_value = !isset($current_plan) ? $plan_keys[0] : NULL;
+-    if (isset($_GET['plan_id']) && isset($plan_options[$_GET['plan_id']])) {
++    if (isset($_GET['plan_id']) && isset($plan_options[$_GET['plan_id']])){
+       $default_value = $_GET['plan_id'];
+     }
+ 
+@@ -824,7 +824,7 @@ function _stripe_subscription_get_plans($pgid = NULL) {
+     $response = NULL;
+     $stripe_plans = array();
+     try {
+-      $response = Stripe_Plan::all();
++      $response = \Stripe\Plan::all();
+     }
+     catch (Exception $e) {
+       watchdog('stripe', 'Stripe_Charge::create Exception: %str', array('%str' => $e->getMessage()));
+@@ -903,12 +903,12 @@ function stripe_subscription_sync_customer($customer, $uid = NULL) {
+   // Load the latest customer object because
+   // there's a possibility this was initiated by an old webhook.
+   try {
+-    $customer = Stripe_Customer::retrieve($customer_id);
++    $customer = \Stripe\Customer::retrieve($customer_id);
+   }
+   catch (Exception $e) {
+     return;
+   }
+-
++	
+   libraries_load('stripe');
+   $livemode = stripe_subscription_live() ? 1 : 0;
+   // Check if there's an existing user ID record
+@@ -922,6 +922,7 @@ function stripe_subscription_sync_customer($customer, $uid = NULL) {
+   if (!isset($uid) && empty($existing_uid)) {
+     return;
+   }
++  
+   // Set uid if it was not sent in
+   if (!isset($uid)) {
+     $uid = $existing_uid;
+@@ -944,6 +945,7 @@ function stripe_subscription_sync_customer($customer, $uid = NULL) {
+     $current_period_end = $subscription->current_period_end;
+   }
+ 
++
+   $fields = array(
+     'uid' => $uid,
+     'customer_id' => $customer_id,
+@@ -957,7 +959,7 @@ function stripe_subscription_sync_customer($customer, $uid = NULL) {
+     'created' => $customer->created,
+     'last_sync' => time()
+   );
+-
++ 
+   if (empty($existing_uid)) {
+     db_insert('stripe_customers')
+       ->fields($fields)
+@@ -988,6 +990,7 @@ function stripe_subscription_get_uid_from_customer_id($customer_id) {
+  * @param $account Object user object
+  */
+ function stripe_subscription_set_roles($event, $plan_id, $uid) {
++
+   $account = user_load($uid);
+   $role_data = stripe_subscription_get_subscription_roles($plan_id);
+   $edit = array('roles' => $account->roles);
+@@ -1068,6 +1071,8 @@ function stripe_subscription_format_description($uid, $name, $mail) {
+  * Implements hook_mail().
+  */
+ function stripe_subscription_mail($key, &$message, $params) {
++    $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
++
+   switch ($key) {
+     case 'subscription_created':
+       $message['subject'] = t('New Subscription');
+@@ -1107,4 +1112,4 @@ function stripe_subscription_mail($key, &$message, $params) {
+  */
+ function stripe_subscription_access($uid) {
+   return (($GLOBALS['user']->uid == $uid && user_access('manage own subscription')) || user_access('manage any subscription')) && $uid > 0;
+-}
+\ No newline at end of file
++}

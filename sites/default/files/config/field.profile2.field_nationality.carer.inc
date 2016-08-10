@@ -149,6 +149,7 @@ $data = array(
 
 $dependencies = array(
   'vocabulary.countries' => 'vocabulary.countries',
+  'profile2_type.carer' => 'profile2_type.carer',
 );
 
 $optional = array();

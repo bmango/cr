@@ -129,7 +129,9 @@ $data = array(
   ),
 );
 
-$dependencies = array();
+$dependencies = array(
+  'profile2_type.carer' => 'profile2_type.carer',
+);
 
 $optional = array();
 

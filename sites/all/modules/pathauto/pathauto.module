@@ -517,7 +517,7 @@ function pathauto_node_operations() {
  */
 function pathauto_node_update_alias(stdClass $node, $op, array $options = array()) {
   // Skip processing if the user has disabled pathauto for the node.
-  if (isset($node->path['pathauto']) && empty($node->path['pathauto'])) {
+  if ((isset($node->path['pathauto']) && empty($node->path['pathauto'])) || !isset($node->path['pathauto'])) {
     return;
   }
 

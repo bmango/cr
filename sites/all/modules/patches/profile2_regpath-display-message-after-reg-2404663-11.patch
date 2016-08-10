@@ -1,0 +1,13 @@
+diff --git a/profile2_regpath.module b/profile2_regpath.module
+index 2ffbf35..c175dca 100644
+--- a/profile2_regpath.module
++++ b/profile2_regpath.module
+@@ -476,7 +476,7 @@ function profile2_regpath_attach_profile_fields(&$form, &$form_state, $form_id,
+         $form['profile_' . $type_name]['#weight'] = $profile_type->weight;
+ 
+         // Attach custom confirmation message to form for later display.
+-        if (isset($misc['confirmation_display'])) {
++        if (isset($misc['confirmation_display']) && $misc['confirmation_display'] == TRUE ) {
+           $_SESSION['profile2_regpath']['confirmation_message'] = $misc['confirmation_message'];
+         }
+       }
