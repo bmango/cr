@@ -251,9 +251,7 @@ $data = array(
   ),
 );
 
-$dependencies = array(
-  'profile2_type.agency' => 'profile2_type.agency',
-);
+$dependencies = array();
 
 $optional = array();
 

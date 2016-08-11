@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'ctools_last_cron',
-  'content' => 1469534120,
+  'content' => 1470818302,
 );
 
 $dependencies = array();

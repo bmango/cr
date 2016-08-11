@@ -121,7 +121,7 @@ $data = array(
       'full' => array(
         'label' => 'above',
         'type' => 'hidden',
-        'weight' => '0',
+        'weight' => '13',
         'settings' => array(),
       ),
       'teaser' => array(

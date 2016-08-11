@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'cache_lifetime',
-  'content' => '0',
+  'content' => '3600',
 );
 
 $dependencies = array();

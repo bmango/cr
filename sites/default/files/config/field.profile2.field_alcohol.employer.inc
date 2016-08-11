@@ -105,9 +105,7 @@ $data = array(
   ),
 );
 
-$dependencies = array(
-  'profile2_type.employer' => 'profile2_type.employer',
-);
+$dependencies = array();
 
 $optional = array();
 

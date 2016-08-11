@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'page_cache_maximum_age',
-  'content' => '0',
+  'content' => '3600',
 );
 
 $dependencies = array();

@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'maintenance_mode',
-  'content' => FALSE,
+  'content' => 0,
 );
 
 $dependencies = array();

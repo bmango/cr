@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'css_js_query_string',
-  'content' => 'oaxc2l',
+  'content' => 'obnhfd',
 );
 
 $dependencies = array();

@@ -116,7 +116,6 @@ $data = array(
 
 $dependencies = array(
   'vocabulary.care_type' => 'vocabulary.care_type',
-  'profile2_type.agency' => 'profile2_type.agency',
 );
 
 $optional = array();

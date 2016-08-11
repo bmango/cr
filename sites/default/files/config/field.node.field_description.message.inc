@@ -100,7 +100,7 @@ $data = array(
       'full' => array(
         'label' => 'hidden',
         'type' => 'text_default',
-        'weight' => '17',
+        'weight' => '7',
         'settings' => array(
           'field_formatter_label' => '',
         ),

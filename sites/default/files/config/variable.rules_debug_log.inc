@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'rules_debug_log',
-  'content' => 1,
+  'content' => 0,
 );
 
 $dependencies = array();

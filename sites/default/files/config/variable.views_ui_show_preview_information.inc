@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'views_ui_show_preview_information',
-  'content' => 1,
+  'content' => 0,
 );
 
 $dependencies = array();

@@ -90,7 +90,7 @@ $data = array(
         'type' => 'text_default',
         'weight' => '0',
         'settings' => array(
-          'field_formatter_label' => 'Message',
+          'field_formatter_label' => '',
         ),
         'module' => 'text',
       ),

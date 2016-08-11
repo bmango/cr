@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'block_cache',
-  'content' => 0,
+  'content' => 1,
 );
 
 $dependencies = array();

@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'cron_last',
-  'content' => 1469534094,
+  'content' => 1470895520,
 );
 
 $dependencies = array();

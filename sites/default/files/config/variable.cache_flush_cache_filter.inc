@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'cache_flush_cache_filter',
-  'content' => 1470132529,
+  'content' => 1470895520,
 );
 
 $dependencies = array();

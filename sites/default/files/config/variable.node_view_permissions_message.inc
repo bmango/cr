@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'node_view_permissions_message',
-  'content' => 0,
+  'content' => 1,
 );
 
 $dependencies = array();

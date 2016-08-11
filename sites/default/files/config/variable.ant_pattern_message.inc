@@ -19,7 +19,7 @@ $data = array(
   }
   if (empty($node->nid)) {
   if (in_array(\'employer active\', $user->roles)) {
-			return "Contact Request from " . $cr_name;
+			return "Contact Request regarding job: " . $jobtitle;
 		} elseif (in_array(\'carer\', $user->roles)) {
 			return "Application for: " . $jobtitle;
 		} else {

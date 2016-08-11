@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'additional_settings__active_tab_page',
-  'content' => 'edit-comment',
+  'content' => 'edit-xmlsitemap',
 );
 
 $dependencies = array();

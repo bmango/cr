@@ -115,7 +115,7 @@ $data = array(
       'full' => array(
         'label' => 'above',
         'type' => 'file_default',
-        'weight' => '2',
+        'weight' => '1',
         'settings' => array(
           'field_formatter_label' => '',
         ),

@@ -165,7 +165,6 @@ $data = array(
 
 $dependencies = array(
   'image_style.logo' => 'image_style.logo',
-  'profile2_type.agency' => 'profile2_type.agency',
 );
 
 $optional = array();

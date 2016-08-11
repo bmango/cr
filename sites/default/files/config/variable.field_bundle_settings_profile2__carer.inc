@@ -37,7 +37,7 @@ $data = array(
       'display' => array(
         'flag_favourite' => array(
           'carer_details_employer' => array(
-            'weight' => '30',
+            'weight' => '2',
             'visible' => TRUE,
           ),
           'page' => array(

@@ -139,7 +139,6 @@ $data = array(
 
 $dependencies = array(
   'vocabulary.care_qualifications' => 'vocabulary.care_qualifications',
-  'profile2_type.carer' => 'profile2_type.carer',
 );
 
 $optional = array();

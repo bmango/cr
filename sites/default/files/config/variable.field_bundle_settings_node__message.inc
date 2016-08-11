@@ -47,7 +47,7 @@ $data = array(
       'display' => array(
         'test_find_job_entity_view_1' => array(
           'full' => array(
-            'weight' => '11',
+            'weight' => '1',
             'visible' => TRUE,
           ),
         ),
@@ -59,7 +59,7 @@ $data = array(
         ),
         'carer_profile_link_entity_view_1' => array(
           'full' => array(
-            'weight' => '12',
+            'weight' => '2',
             'visible' => TRUE,
           ),
         ),

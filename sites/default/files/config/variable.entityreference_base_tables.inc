@@ -61,6 +61,10 @@ $data = array(
       0 => 'rules_config',
       1 => 'id',
     ),
+    'menu_link' => array(
+      0 => 'menu_links',
+      1 => 'mlid',
+    ),
   ),
 );
 

@@ -14,6 +14,21 @@ $data = array(
       'key' => 'actions',
       'weight' => 99,
     ),
+    'user_login' => array(
+      'path' => array(),
+      'key' => 'actions',
+      'weight' => 99,
+    ),
+    'user_pass' => array(
+      'path' => array(),
+      'key' => 'actions',
+      'weight' => 99,
+    ),
+    'user_register_form' => array(
+      'path' => array(),
+      'key' => 'actions',
+      'weight' => 99,
+    ),
   ),
 );
 

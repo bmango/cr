@@ -8,7 +8,7 @@ $api = '2.0.0';
 
 $data = array(
   'name' => 'captcha_default_challenge',
-  'content' => 'captcha/Math',
+  'content' => 'recaptcha/reCAPTCHA',
 );
 
 $dependencies = array();

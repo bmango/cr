@@ -96,7 +96,7 @@ $data = array(
       ),
     ),
     'settings' => array(
-      'file_directory' => '[user]',
+      'file_directory' => 'users/user_[current-user:uid]',
       'file_extensions' => 'txt doc docx pdf jpg jpeg png gif',
       'max_filesize' => '',
       'description_field' => 0,
@@ -115,7 +115,7 @@ $data = array(
       'full' => array(
         'label' => 'above',
         'type' => 'file_default',
-        'weight' => '18',
+        'weight' => '8',
         'settings' => array(
           'field_formatter_label' => '',
         ),
