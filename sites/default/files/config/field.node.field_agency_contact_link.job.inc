@@ -90,7 +90,7 @@ $data = array(
       'module' => 'link',
       'active' => 0,
       'settings' => array(
-        'label_help_description' => '',
+        'label_help_description' => 'A link to an application page or more information about this job, or general information. Use the title field to give a description to the link; eg: Application Link, More Details, etc',
       ),
     ),
     'settings' => array(
