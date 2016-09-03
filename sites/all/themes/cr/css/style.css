@@ -11197,3 +11197,26 @@ fieldset[disabled] #block-ajax-contact-contact-form button.form-submit.focus {
   margin-bottom: 15px;
 }
 /*# sourceMappingURL=style.css.map */
+
+#block-block-8 {
+	xfloat:left;
+	xmargin-right:50px;
+	xwidth:30%;
+}
+
+#block-block-21 {
+	xfloat:left;
+	xwidth:30%;
+}
+
+#block-block-21 a {
+	color:#7c000e;
+}
+
+footer.footer .copyright {
+	clear:left;
+}
+
+footer.footer {
+	background:#ff96a1;
+}
