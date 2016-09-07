@@ -170,6 +170,15 @@
     </div>
   </div>
 </div>
+
+<?php if (!empty($page['content_bottom'])): ?>
+  <section id="content-bottom" class="container-fluid">
+    <div class="row">
+      <?php print render($page['content_bottom']); ?>
+    </div>
+  </section>  <!-- /#content_bottom -->
+<?php endif; ?>
+
 <footer class="footer">
   <div class="container-fluid">
     <div class="row">

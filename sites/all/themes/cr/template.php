@@ -43,7 +43,7 @@ function cr_preprocess_html(&$vars) {
     }
 
   }
-  
+
   foreach($vars['user']->roles as $role){
     $vars['classes_array'][] = 'role-' . drupal_html_class($role);
   }
@@ -51,23 +51,23 @@ function cr_preprocess_html(&$vars) {
 }
 
 /**
-* theme_menu_link()
-*/
+ * theme_menu_link()
+ */
 
 function cr_menu_link(array $variables) {
 
-	global $user;
+  global $user;
 
-   if ($variables['element']['#title']=='Edit Job Details') {
-		 $nid = db_query('SELECT nid FROM {node} WHERE type = :type and uid = :uid', array(':type' => 'job', ':uid' => $user->uid))->fetchField();
-		 //dsm($nid);
-		 //dsm($variables['element']);
-		 if($nid > 0) {
-	      $variables['element']['#href']='job/' . $user->uid . '/' . $nid;
-		 } else {
-	      $variables['element']['#attributes']['class'][] = 'invisible';
-		 }
-	 }
+  if ($variables['element']['#title']=='Edit Job Details') {
+    $nid = db_query('SELECT nid FROM {node} WHERE type = :type and uid = :uid', array(':type' => 'job', ':uid' => $user->uid))->fetchField();
+    //dsm($nid);
+    //dsm($variables['element']);
+    if($nid > 0) {
+      $variables['element']['#href']='job/' . $user->uid . '/' . $nid;
+    } else {
+      $variables['element']['#attributes']['class'][] = 'invisible';
+    }
+  }
 
   //add class for li
   $variables['element']['#attributes']['class'][] = 'menu-' . $variables['element']['#original_link']['mlid'];
@@ -97,12 +97,12 @@ function cr_checkbox($variables) {
   }
 
   if(isset($element['#attributes']['id'])) {
-	  if ($element['#attributes']['id'] == 'edit-profile-carer-field-profile-active-und') {
-			$element['#attributes']['data-toggle'] = 'toggle';
-			$element['#attributes']['data-on'] = 'Active';
-			$element['#attributes']['data-off'] = 'Unactive';
-			$element['#attributes']['data-onstyle'] = 'success';
-	  }
+    if ($element['#attributes']['id'] == 'edit-profile-carer-field-profile-active-und') {
+      $element['#attributes']['data-toggle'] = 'toggle';
+      $element['#attributes']['data-on'] = 'Active';
+      $element['#attributes']['data-off'] = 'Unactive';
+      $element['#attributes']['data-onstyle'] = 'success';
+    }
   }
 
   _form_set_class($element, array('form-checkbox'));
@@ -128,7 +128,7 @@ function cr_theme() {
     'path' => drupal_get_path('theme', 'cr') . '/templates',
     'template' => 'user-login',
     'preprocess functions' => array(
-       'cr_preprocess_user_login'
+      'cr_preprocess_user_login'
     ),
   );
   return $items;
@@ -147,16 +147,16 @@ function cr_preprocess_page(&$vars) {
   global $user;
 
   if(arg(0)=='profile-employer') :
-		drupal_set_title(t('My Profile'));
+    drupal_set_title(t('My Profile'));
 
   elseif(arg(0)=='subscription' && arg(1)=='cancelled') :
     drupal_set_title('Membership Cancelled');
 
   elseif (arg(0) == 'user' && arg(2) == 'edit') :
-		drupal_set_title(t('Change email/password'));
+    drupal_set_title(t('Change email/password'));
 
   elseif(arg(0) == 'profile-carer' && in_array('employer active', $user->roles)) :
-      $variables['theme_hook_suggestion'] = 'page__profile_carer_carer_employer_active';
+    $variables['theme_hook_suggestion'] = 'page__profile_carer_carer_employer_active';
 
   elseif(arg(0) == 'profile-carer' && arg(1) == $user->uid) :
     drupal_set_title(t('My Profile'));
@@ -166,32 +166,32 @@ function cr_preprocess_page(&$vars) {
     drupal_set_title($profile['agency']->field_company['und'][0]['value']);
 
   // set title to carer name for carer details page
-	elseif(arg(0) == 'carer-details' && is_numeric(arg(1))) :
-		//$profile = profile2_load(arg(1));
-		//dsm($profile);
-		//drupal_set_title(t($profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_last_name_em['und'][0]['value']));
+  elseif(arg(0) == 'carer-details' && is_numeric(arg(1))) :
+    //$profile = profile2_load(arg(1));
+    //dsm($profile);
+    //drupal_set_title(t($profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_last_name_em['und'][0]['value']));
     drupal_set_title(cr_profile(arg(1)));
 
   //elseif(arg(0)=='node' && is_numeric(arg(1))) :
-	//elseif($vars['node']->type=='message') :
+  //elseif($vars['node']->type=='message') :
 
   elseif(arg(0)=='node' && arg(1)=='add' && arg(2)=='message') :
-		if (isset($_GET['field_to'])) :
+    if (isset($_GET['field_to'])) :
       $to_user = user_load($_GET['field_to']);
       //dpm($to_user);
-   	  if (in_array('agency', $to_user->roles)) :
-      	$profile = profile2_by_uid_load($_GET['field_to'], 'agency');
+      if (in_array('agency', $to_user->roles)) :
+        $profile = profile2_by_uid_load($_GET['field_to'], 'agency');
         $to = $profile->field_company['und'][0]['value'];
       else :
         $cr_uid = $_GET['field_to'];
         $to = cr_profile($cr_uid);
       endif;
       drupal_set_title('Send message to ' . $to);
-		endif;
+    endif;
 
-	elseif(arg(0)=='node') :
-		$menu_object = menu_get_object();
-	  if (isset($menu_object->type)) :
+  elseif(arg(0)=='node') :
+    $menu_object = menu_get_object();
+    if (isset($menu_object->type)) :
       $field_items = field_get_items('node', $menu_object, 'field_image');
       if(!$field_items) {
         $vars['classes_array'][] = "no-main-image";
@@ -201,18 +201,18 @@ function cr_preprocess_page(&$vars) {
       //dpm($vars);
 
       if ('message' == $menu_object->type) :
-				$profile = cr_profile($vars['node']->uid);
-				//dpm($profile);
-				//$vars['title'] = "Message from " . $profile;
-		 elseif ('job' == $menu_object->type) :
-      if($user->uid == $vars['node']->uid  && in_array('employer', $user->roles)) :
-        $vars['title'] = 'My Job';
+        $profile = cr_profile($vars['node']->uid);
+      //dpm($profile);
+      //$vars['title'] = "Message from " . $profile;
+      elseif ('job' == $menu_object->type) :
+        if($user->uid == $vars['node']->uid  && in_array('employer', $user->roles)) :
+          $vars['title'] = 'My Job';
+        endif;
       endif;
-     endif;
-		endif;
-	endif;
-	//dpm($vars['node']);
-	//dpm($vars);
+    endif;
+  endif;
+  //dpm($vars['node']);
+  //dpm($vars);
 }
 
 /**
@@ -225,9 +225,9 @@ function cr_preprocess_page(&$vars) {
 function cr_profile2_view_alter($build) {
   // If Devel is enabled, you may uncomment dpm() to find out how
   // you can access the various fields of your profile.
-   //dpm($build);
- // if (!isset($build['empty'])) {
-	if($build['#view_mode'] == 'carer_details_employer') {
+  //dpm($build);
+  // if (!isset($build['empty'])) {
+  if($build['#view_mode'] == 'carer_details_employer') {
     drupal_set_title(cr_profile(arg(1)));
   }
 }
