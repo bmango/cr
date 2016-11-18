@@ -19,3 +19,5 @@ robots.txt
 gulpfile.js
 package.json
 php.ini
+BingSiteAuth.xml
+.ftpquota
