@@ -567,9 +567,6 @@ function job_to_arg($arg1) {
  * End create special menu item for employers to go to their jobs page **
  */
 
-
-
-
 /*
 function cr_form_alter(&$form, $form_state, $form_id) {
   if($form_id == 'user_register_form')
