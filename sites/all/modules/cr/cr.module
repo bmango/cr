@@ -22,20 +22,22 @@ function cr_profile($cr_uid) {
 		return $profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_surname_initial['und'][0]['value'];
 	} else {
 		//$profile = profile2_by_uid_load($cr_uid, 'carer_employer');
-    $profile = profile2_by_uid_load($cr_uid, 'employer');
+	    $profile = profile2_by_uid_load($cr_uid, 'employer');
 		if($profile->pid) {
 			return $profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_surname_initial['und'][0]['value'];
 		} else {
-      $profile = profile2_by_uid_load($cr_uid, 'agency');
-      if($profile->pid) {
-        return $profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_surname_initial['und'][0]['value'];
-      } else {
-        return false;
-      }
+			$profile = profile2_by_uid_load($cr_uid, 'agency');
+	        if($profile->pid) {
+	            return $profile->field_first_name_em['und'][0]['value'] . ' ' . $profile->field_surname_initial['und'][0]['value'];
+	        } else {
+	            return false;
+	        }
 		}
 	}
 }
 
+
+// return agency name
 function cr_agency_name($aid) {
   $profile = profile2_by_uid_load($aid, 'agency');
   if($profile->pid) {
@@ -48,7 +50,6 @@ function cr_agency_name($aid) {
 //get node from employer
 function cr_employer_job($cr_uid) {
   $nid = db_query("SELECT nid FROM {node} WHERE ((uid = :uid) AND (node.type IN ('job'))) ORDER BY created DESC LIMIT 1 OFFSET 0", array(":uid" => $cr_uid))->fetchField();
-  //dpm($nid);
   return $nid;
 }
 
@@ -59,6 +60,7 @@ function cr_count_agency_jobs($cr_uid) {
 
 function cr_node_presave($node) {
 
+	// set district field based on io lookup
 	if ($node->type == 'job') :
 
 		$pc = $node->field_address['und'][0]['postal_code'];
@@ -77,60 +79,59 @@ function cr_node_presave($node) {
 
 		$node->field_district['und'][0]['value'] = $district;
 
-  //set the carer field in the message based on whether the carer is the sender or the receiver
-  elseif ($node->type == 'message') :
-    if(!isset($node->field_carer['und'][0]['target_id'])) :
-      //is the carer the message recipient?
-      $cid = $node->field_to['und'][0]['target_id'];
-      $carer = user_load($cid);
-      if (in_array('carer', $carer->roles)) :
-        $node->field_carer['und'][0]['target_id'] = $cid;
-      else:
-        //is the carer the message sender?
-        $cid = $node->uid;
-        $carer = user_load($cid);
-        if (in_array('carer', $carer->roles)) :
-          $node->field_carer['und'][0]['target_id'] = $cid;
-        endif;
-      endif;
+	//set the carer field in the message based on whether the carer is the sender or the receiver
+	elseif ($node->type == 'message') :
+		if(!isset($node->field_carer['und'][0]['target_id'])) :
+			//is the carer the message recipient?
+			$cid = $node->field_to['und'][0]['target_id'];
+			$carer = user_load($cid);
+			if (in_array('carer', $carer->roles)) :
+				$node->field_carer['und'][0]['target_id'] = $cid;
+			else:
+				//is the carer the message sender?
+				$cid = $node->uid;
+				$carer = user_load($cid);
+				if (in_array('carer', $carer->roles)) :
+				  $node->field_carer['und'][0]['target_id'] = $cid;
+				endif;
+			endif;
 		endif;
-    //is this message to an agency?
-    $to = $node->field_to['und'][0]['target_id'];
-    $to_user = user_load($to);
-    if (in_array('agency', $to_user->roles)) :
-    	$profile = profile2_by_uid_load($to, 'agency');
-      $node->field_agency['und'][0]['value'] = $profile->field_company['und'][0]['value'];
-    endif;
+		//is this message to an agency?
+		$to = $node->field_to['und'][0]['target_id'];
+		$to_user = user_load($to);
+		if (in_array('agency', $to_user->roles)) :
+			$profile = profile2_by_uid_load($to, 'agency');
+			$node->field_agency['und'][0]['value'] = $profile->field_company['und'][0]['value'];
+		endif;
 	endif;
 }
 
-//Update profile
+//set user first name/last name fields based on profile fields
 function cr_profile2_update($profile) {
-  global $user;
+	global $user;
 
-  //set first and last name on user account
+	//set first and last name on user account
+	$obj = entity_metadata_wrapper('user', $user);
 
-  $obj = entity_metadata_wrapper('user', $user);
-
-  if(!array_key_exists('und', $obj->field_last_name_em)) {
-    $obj->field_last_name_em = $profile->field_last_name_em['und'][0]['value'];
-    $obj->field_first_name_em = $profile->field_first_name_em['und'][0]['value'];
-    $obj->field_surname_initial = substr($profile->field_last_name_em['und'][0]['value'], 0, 1);
-    $obj->save();
-  }
+	if(!array_key_exists('und', $obj->field_last_name_em)) {
+		$obj->field_last_name_em = $profile->field_last_name_em['und'][0]['value'];
+		$obj->field_first_name_em = $profile->field_first_name_em['und'][0]['value'];
+		$obj->field_surname_initial = substr($profile->field_last_name_em['und'][0]['value'], 0, 1);
+		$obj->save();
+	}
 }
 
 //Set value of hidden district field from postcode lookup api
 function cr_profile2_presave($profile) {
 
-  global $user;
+	global $user;
 
-  //set first and last name on user account
-  $obj = entity_metadata_wrapper('user', $user);
-  $obj->field_last_name_em = $profile->field_last_name_em['und'][0]['value'];
-  $obj->field_first_name_em = $profile->field_first_name_em['und'][0]['value'];
-  $obj->field_surname_initial = substr($profile->field_last_name_em['und'][0]['value'],0,1);
-  $obj->save();
+	//set first and last name on user account
+	$obj = entity_metadata_wrapper('user', $user);
+	$obj->field_last_name_em = $profile->field_last_name_em['und'][0]['value'];
+	$obj->field_first_name_em = $profile->field_first_name_em['und'][0]['value'];
+	$obj->field_surname_initial = substr($profile->field_last_name_em['und'][0]['value'],0,1);
+	$obj->save();
 
 	if ($profile->type == 'carer') :
 
@@ -149,6 +150,10 @@ function cr_profile2_presave($profile) {
 
 		$profile->field_district['und'][0]['value'] = $district;
 		$profile->field_surname_initial['und'][0]['value'] = substr($profile->field_last_name_em['und'][0]['value'],0,1);
+
+	elseif ($profile->type == 'employer' || $profile->type == 'agency'):
+		$profile->field_surname_initial['und'][0]['value'] = substr($profile->field_last_name_em['und'][0]['value'],0,1);
+	endif;
 
 /*
 		if (strlen($pc) > 3) :
@@ -174,69 +179,65 @@ function cr_profile2_presave($profile) {
 		//endif;
 
 	//elseif ($profile->type == 'carer_employer'):
-  elseif ($profile->type == 'employer' || $profile->type == 'agency'):
-		$profile->field_surname_initial['und'][0]['value'] = substr($profile->field_last_name_em['und'][0]['value'],0,1);
-	endif;
 }
 
 //show correct view mode to user
 function cr_entity_view_mode_alter(&$view_mode, $context) {
-  global $user;
-  //print_r(user_roles());
+	global $user;
+	//print_r(user_roles());
 
-  if ($context['entity_type'] == 'profile2'){
-    //dpm($context);
-    if($context['entity']->type == 'carer') {
-      //only show the full page view to the profile author
-      if($user->uid == $context['entity']->uid) {
-        $view_mode = 'page';
-      } else {
-      //if(count(array_intersect(array('agency', 'employer'), array_values($user->roles)))>0) {
-        //if (in_array(array('agency', ''), $user->roles)) {
-        $view_mode = 'carer_details_employer';
-        //$context['entity']->label = 'hi <i class="fa fa-user"></i> ' . $context['entity']->field_first_name_em['und'][0]['value'] . ' ' . $context['entity']->field_last_name_em['und'][0]['value'];
-        $context['entity']->label = 'Carer Details for ' . $context['entity']->field_first_name_em['und'][0]['value'] . ' ' . $context['entity']->field_last_name_em['und'][0]['value'];
-      }
-    } elseif($context['entity']->type == 'agency' && $user->uid == $context['entity']->uid) {
-      $view_mode = 'agency';
-    }
-  }
+	if ($context['entity_type'] == 'profile2'){
+		//dpm($context);
+		if($context['entity']->type == 'carer') {
+			//only show the full page view to the profile author
+			if($user->uid == $context['entity']->uid) {
+				$view_mode = 'page';
+			} else {
+				//if(count(array_intersect(array('agency', 'employer'), array_values($user->roles)))>0) {
+				//if (in_array(array('agency', ''), $user->roles)) {
+				$view_mode = 'carer_details_employer';
+				//$context['entity']->label = 'hi <i class="fa fa-user"></i> ' . $context['entity']->field_first_name_em['und'][0]['value'] . ' ' . $context['entity']->field_last_name_em['und'][0]['value'];
+				$context['entity']->label = 'Carer Details for ' . $context['entity']->field_first_name_em['und'][0]['value'] . ' ' . $context['entity']->field_last_name_em['und'][0]['value'];
+			}
+		} elseif($context['entity']->type == 'agency' && $user->uid == $context['entity']->uid) {
+			  $view_mode = 'agency';
+		}
+	}
 
-  if ($context['entity_type'] == 'node' && $context['entity']->type == 'job'){
-    //is it an agency job?
-    //dpm($context['entity']);
-    if (isset($context['entity']->field_agency_job['und'][0]['value'])) {
-      if ($context['entity']->field_agency_job['und'][0]['value'] == 'Yes') {
+	if ($context['entity_type'] == 'node' && $context['entity']->type == 'job'){
+		//is it an agency job?
+		//dpm($context['entity']);
+		if (isset($context['entity']->field_agency_job['und'][0]['value'])) {
+			if ($context['entity']->field_agency_job['und'][0]['value'] == 'Yes') {
 
-        // if they are an agency
-        if (in_array('agency', $user->roles)) {
+				// if they are an agency
+				if (in_array('agency', $user->roles)) {
 
-          // are they the author?
-          if ($context['entity']->uid == $user->uid) {
-            $view_mode = 'job_details_agency_view';
-          } else {
-            $view_mode = 'job_details_agency_';
-          }
-        } else {
-          $view_mode = 'job_details_agency_';
-        }
+					// are they the author?
+					if ($context['entity']->uid == $user->uid) {
+						$view_mode = 'job_details_agency_view';
+					} else {
+						$view_mode = 'job_details_agency_';
+					}
+				} else {
+					$view_mode = 'job_details_agency_';
+				}
 
-        // it is a non agency job
-      } else {
+			// it is a non agency job
+			} else {
 
-        // if they are a carer or an agency
-        if (in_array('carer', $user->roles) || in_array('agency', $user->roles)) {
-          $view_mode = 'job_details_carer';
-
-          //do not show full content unless they are the author
-        } elseif (in_array('employer', $user->roles) && $context['entity']->uid == $user->uid) {
-          $view_mode = 'full';
-        } else {
-          $view_mode = 'job_details_carer';
-        }
-      }
-    }
-  }
+				// if they are a carer or an agency
+				if (in_array('carer', $user->roles) || in_array('agency', $user->roles)) {
+					$view_mode = 'job_details_carer';
+				//do not show full content unless they are the author
+				} elseif (in_array('employer', $user->roles) && $context['entity']->uid == $user->uid) {
+					$view_mode = 'full';
+				} else {
+					$view_mode = 'job_details_carer';
+				}
+		    }
+		}
+	}
 }
 
 /**

@@ -7555,10 +7555,6 @@ body.navbar-tray-open.navbar-vertical.navbar-fixed {
   height: 40px;
 }
 @media (max-width: 480px) {
-  .flag-style {
-    float: left;
-    clear: left;
-  }
 }
 @media (min-width: 480px) {
   .flag-style {
@@ -7826,7 +7822,7 @@ ul.tabs--primary {
 .ui-widget textarea,
 .ui-widget button {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 100%;
+  font-size: 16px;
 }
 .form-control {
   padding: 3px 6px 4px;
@@ -8240,6 +8236,7 @@ fieldset.captcha {
 .page-profile-carer .field {
   margin: 0 0 .8em;
   clear: left;
+  clear: none;
 }
 .page-profile-carer .field:before,
 .page-profile-carer .field:after {
@@ -8308,6 +8305,29 @@ fieldset.captcha {
   background: #ddd;
   color: #333;
 }
+@media (min-width: 480px) {
+  .page-profile-carer .field.field-name-field-image {
+    float: right;
+    padding: 10px 10px 10px 30px;
+  }
+}
+.page-profile-carer .field.field-name-field-image .field-items {
+  margin: 0;
+}
+.page-profile-carer .field.field-name-field-image .field-items img {
+  border-radius: 5px;
+}
+@media (min-width: 600px) {
+  .page-profile-carer .field.field-name-field-description {
+    margin-right: 240px;
+  }
+}
+.page-profile-carer .field.field-name-field-description .field-label {
+  display: none;
+}
+.page-profile-carer .field.field-name-field-description .field-items {
+  margin: 0;
+}
 @media (max-width: 768px) {
   .page-profile-carer .field.field-name-field-description {
     border: 1px solid #ddd;
@@ -8320,15 +8340,11 @@ fieldset.captcha {
     width: auto;
     float: none;
     margin-bottom: .3em;
+    display: none;
   }
   .page-profile-carer .field.field-name-field-description .field-items {
     margin: 0 0 0.4em 0;
     clear: left;
-  }
-}
-@media (max-width: 480px) {
-  .page-profile-carer .field .field-items {
-    word-break: break-all;
   }
 }
 .page-profile-carer .paragraphs-items-field-other-spoken-languages .entity .field,
@@ -8554,12 +8570,6 @@ fieldset[disabled] .node-type-job.page-node-edit #job-node-form button#edit-unpu
   height: 40px;
 }
 @media (max-width: 480px) {
-  .node-type-job .view-mode-job_details_carer .flag-outer,
-  .node-type-job .view-mode-job_details_agency_ .flag-outer,
-  .node-type-job .view-mode-job_details_agency_view .flag-outer {
-    float: left;
-    clear: left;
-  }
 }
 @media (min-width: 480px) {
   .node-type-job .view-mode-job_details_carer .flag-outer,
@@ -9027,11 +9037,21 @@ ul.tabs--primary {
 }
 .carer-list .views-row {
   margin: 1em 0 2em;
-  padding: 15px;
+  padding: 15px 15px 10px;
   border: 1px solid #bbb;
   border-radius: 8px;
   background: #f4f4f4;
   clear: both;
+}
+@media screen and (min-width: 768px) {
+  .carer-list .views-row {
+    width: 47%;
+    float: left;
+    clear: none;
+  }
+  .carer-list .views-row.views-row-odd {
+    margin-right: 6%;
+  }
 }
 .carer-list .views-row > div {
   padding: 8px;
@@ -9050,6 +9070,24 @@ ul.tabs--primary {
   margin-top: 1px;
   float: left;
 }
+.carer-list .views-row .views-field.views-field-field-district {
+  float: left;
+  clear: none;
+  font-size: 110%;
+  margin: 3px 0 0 15px;
+}
+.carer-list .views-row .views-field.views-field-field-district .field-content {
+  display: inline-block;
+}
+.carer-list .views-row .views-field.views-field-field-district * {
+  display: inline;
+}
+.carer-list .views-row .views-field.views-field-field-description {
+  overflow: visible;
+}
+.carer-list .views-row .views-field.views-field-field-description .field-content {
+  margin-left: 0;
+}
 .carer-list .views-row .views-field.views-field-field-pay-rate-basis div:before {
   content: "£";
 }
@@ -9059,6 +9097,16 @@ ul.tabs--primary {
 }
 .carer-list .views-row .views-field-views-conditional img {
   margin: 15px 0 0;
+}
+.carer-list .views-row .views-field-field-image {
+  float: right;
+  padding: 0 0 10px 20px;
+}
+.carer-list .views-row .views-field-field-image .field-content {
+  margin-left: 0 !important;
+}
+.carer-list .views-row .views-field-field-image .field-content img {
+  border: 1px solid #aaa;
 }
 .carer-list .views-row .group-top .field-label,
 .carer-list .views-row .group-top .views-label,
@@ -9083,6 +9131,9 @@ ul.tabs--primary {
 .carer-list .views-row .group-left .field-content,
 .carer-list .views-row .group-right .field-content {
   margin-left: 170px;
+}
+.carer-list .views-row .group-left .views-field:last-child {
+  margin-bottom: 0;
 }
 .carer-list .views-row .span {
   float: left;
@@ -9128,10 +9179,6 @@ ul.tabs--primary {
   clear: none;
 }
 @media (max-width: 480px) {
-  .carer-list .views-row .group-top-bar .views-field-ops {
-    float: left;
-    clear: left;
-  }
 }
 @media (min-width: 480px) {
   .carer-list .views-row .group-top-bar .views-field-ops {
@@ -9194,15 +9241,17 @@ ul.tabs--primary {
   display: inline-block;
   font-style: italic;
 }
-@media screen and (min-width: 768px) {
+.carer-list .views-row .group-left {
+  width: auto;
+}
+@media screen and (min-width: 550px) {
   .carer-list .views-row .group-left {
-    float: left;
-    width: 50%;
     clear: left;
+    margin-right: 0;
   }
   .carer-list .views-row .group-right {
     float: right;
-    width: 45%;
+    width: 140px;
   }
   .carer-list .views-row .group-top {
     float: left;
@@ -9218,8 +9267,13 @@ ul.tabs--primary {
 .carer-list .views-row .group-more {
   clear: both;
   overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
 }
-.carer-list .views-row .group-more a {
+.carer-list .views-row .group-more .views-field {
+  margin: 0;
+}
+.carer-list .views-row .group-more .views-field a {
   display: block;
   font-size: 200%;
 }
@@ -9509,13 +9563,9 @@ fieldset[disabled] .carer-list .view-filters .views-exposed-widget.views-reset-b
 .view-mode-carer_details_employer .group-personal .group-top .flag-outer {
   width: 40px;
   height: 40px;
+  float: right;
 }
 @media (max-width: 480px) {
-  .view-mode-carer_details_employer .group-personal h4 .flag-outer,
-  .view-mode-carer_details_employer .group-personal .group-top .flag-outer {
-    float: left;
-    clear: left;
-  }
 }
 @media (min-width: 480px) {
   .view-mode-carer_details_employer .group-personal h4 .flag-outer,
@@ -9542,12 +9592,6 @@ fieldset[disabled] .carer-list .view-filters .views-exposed-widget.views-reset-b
   background: url('../images/favourite-1.png') no-repeat;
 }
 @media (max-width: 480px) {
-  .view-mode-carer_details_employer .group-personal h4 .flag-outer,
-  .view-mode-carer_details_employer .group-personal .group-top .flag-outer {
-    float: left;
-    clear: none;
-    margin: .6em 0 0;
-  }
 }
 /* Menu */
 .local-menu li {
@@ -11266,5 +11310,8 @@ fieldset[disabled] #block-ajax-contact-contact-form button.form-submit.focus {
 }
 .cr-user-login-form-wrapper .captcha {
   margin-bottom: 15px;
+}
+.panel:last-child {
+  margin-bottom: 25px;
 }
 /*# sourceMappingURL=style.css.map */

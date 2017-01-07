@@ -145,7 +145,7 @@ ul.tabs--primary {
 
 .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
 	font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; 
-	font-size:100%;
+	font-size:16px;
 }
 
 .form-control {
@@ -540,7 +540,8 @@ fieldset.captcha {
 
   .field {
     .field-style-1;
-    
+		clear: none;
+
     .field-label {
       clear:left;
     }
@@ -558,7 +559,33 @@ fieldset.captcha {
       
     }
 
+		&.field-name-field-image {
+			@media (min-width: @screen-phone) {
+				float: right;
+				padding: 10px 10px 10px 30px;
+			}
+
+			.field-items {
+				margin: 0;
+				img {
+					border-radius: 5px;
+				}
+			}
+		}
+
 		&.field-name-field-description {
+			@media (min-width: 600px) {
+				margin-right: 240px;
+			}
+
+			.field-label {
+				display: none;
+			}
+
+			.field-items {
+				margin: 0;
+			}
+
 			@media (max-width: @screen-tablet) {
 				border: 1px solid #ddd;
 				border-top-left-radius: 5px;
@@ -570,6 +597,7 @@ fieldset.captcha {
 					width:auto;
 					float: none;
 					margin-bottom: .3em;
+					display: none;
 				}
 
 				.field-items {
@@ -578,13 +606,7 @@ fieldset.captcha {
 				}
 			}
 		}
-
-		@media (max-width: @screen-phone) {
-			.field-items {
-				word-break: break-all;
-			}
-		}
-  }
+	}
   
   .paragraphs-items-field-other-spoken-languages .entity .field, .paragraphs-items-field-experience .entity .field {
     clear:none;
@@ -897,11 +919,22 @@ ul.tabs--primary {
 	
 	.views-row {
 		margin:1em 0 2em;
-		padding:15px;
+		padding:15px 15px 10px;
 		border:1px solid #bbb;
 		border-radius:8px;
 		background:#f4f4f4;
 		clear:both;
+
+		@media @tablet {
+			//.make-md-column(6);
+			width: 47%;
+			float: left;
+			clear: none;
+
+			&.views-row-odd {
+				margin-right: 6%;
+			}
+		}
 				
 		> div {
 			//border:1px solid #999;
@@ -912,8 +945,8 @@ ul.tabs--primary {
 		.views-field {
 			clear:left;
 			margin:0 0 0.45em;
-			overflow:hidden;
-			
+			overflow: hidden;
+
 			&.views-field-nothing-1 {
 				margin:0;
 			}
@@ -922,6 +955,29 @@ ul.tabs--primary {
 				font-size:125%;
 				margin-top:1px;
         float:left;
+			}
+
+			&.views-field-field-district {
+				float: left;
+				clear: none;
+				font-size: 110%;
+				margin: 3px 0 0 15px;
+
+				.field-content {
+					display: inline-block;
+				}
+
+				& * {
+					display: inline;
+				}
+			}
+
+			&.views-field-field-description {
+				overflow: visible;
+
+				.field-content {
+					margin-left: 0;
+				}
 			}
 
 			&.views-field-field-pay-rate-basis div:before {
@@ -936,6 +992,17 @@ ul.tabs--primary {
     .views-field-views-conditional img {
       margin:15px 0 0;
     }
+
+		.views-field-field-image {
+			float: right;
+			padding: 0 0 10px 20px;
+			.field-content {
+				margin-left: 0 !important;
+				img {
+					border: 1px solid #aaa;
+				}
+			}
+		}
 		
 		.group-top .field-label, .group-top .views-label, .group-left .field-label, 
     .group-left .views-label, .group-right .field-label, .group-right .views-label {
@@ -958,6 +1025,10 @@ ul.tabs--primary {
         margin-left:170px;
       }
     }
+
+		.group-left .views-field:last-child {
+			margin-bottom: 0;
+		}
 		
 		.span {
 			float:left;
@@ -1054,16 +1125,22 @@ ul.tabs--primary {
       }
     }
 
-		@media @tablet {
+		.group-left {
+			width: auto;
+		}
+
+		@media screen and (min-width: 550px) {
 			.group-left {
-				float:left;
-				width:50%;
+				//float:left;
+				//width: calc(~"100% - 160px");
 				clear:left;
+				margin-right: 0;
 			}
 
 			.group-right {
 				float:right;
-				width:45%;
+				//width:45%;
+				width:140px;
 			}
 
 			.group-top {
@@ -1077,24 +1154,29 @@ ul.tabs--primary {
 				width:50%;
 				padding-top:14px;
 			}
-
 		}
 		
 
 		.group-more {
 			clear:both;
-			overflow:hidden; 
-			
-			a {
-				display:block;
-				font-size:200%;
-				//background:url('../images/arrow-down-2.png') no-repeat left;
-				//text-indent:-999px;
-				
-				&.more-show {
-					//background-image:url('../images/arrow-up-2.png');
+			overflow:hidden;
+			padding-top:0;
+			padding-bottom: 0;
+
+			.views-field {
+				margin: 0;
+
+				a {
+					display:block;
+					font-size:200%;
+					//background:url('../images/arrow-down-2.png') no-repeat left;
+					//text-indent:-999px;
+
+					&.more-show {
+						//background-image:url('../images/arrow-up-2.png');
+					}
 				}
-			} 
+			}
 		}
 		
 		.group-more-content {
@@ -1269,10 +1351,11 @@ ul.tabs--primary {
 
 			.flag-outer {
 				.flag-style;
+				float: right;
 				@media (max-width:@screen-phone) {
-					float: left;
-					clear: none;
-					margin: .6em 0 0;
+					//float: left;
+					//clear: none;
+					//margin: .6em 0 0;
 				}
 			}
 		}
@@ -2026,4 +2109,8 @@ div.title-wrapper {
 
 .cr-user-login-form-wrapper .captcha {
 	margin-bottom: 15px;
+}
+
+.panel:last-child {
+	margin-bottom: 25px;
 }
