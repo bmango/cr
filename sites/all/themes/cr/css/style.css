@@ -6463,8 +6463,6 @@ button.close {
 #content-bottom .region-content-bottom:after,
 footer.footer .region-footer:before,
 footer.footer .region-footer:after,
-footer.footer .region-footer .block-inner:before,
-footer.footer .region-footer .block-inner:after,
 #block-block-18 .wrapper:before,
 #block-block-18 .wrapper:after {
   content: " ";
@@ -6488,7 +6486,6 @@ footer.footer .region-footer .block-inner:after,
 .modal-footer:after,
 #content-bottom .region-content-bottom:after,
 footer.footer .region-footer:after,
-footer.footer .region-footer .block-inner:after,
 #block-block-18 .wrapper:after {
   clear: both;
 }
@@ -8614,6 +8611,19 @@ fieldset[disabled] .node-type-job.page-node-edit #job-node-form button#edit-unpu
 .node-type-job .view-mode-job_details_agency_view .field-name-title .field-items h4 {
   margin: 0;
 }
+.node-type-job .view-mode-job_details_carer .field-name-field-description .field-items,
+.node-type-job .view-mode-job_details_agency_ .field-name-field-description .field-items,
+.node-type-job .view-mode-job_details_agency_view .field-name-field-description .field-items {
+  margin-left: 0;
+}
+@media screen and (min-width: 768px) {
+  .node-type-job .view-mode-job_details_carer .field-name-field-description .field-items,
+  .node-type-job .view-mode-job_details_agency_ .field-name-field-description .field-items,
+  .node-type-job .view-mode-job_details_agency_view .field-name-field-description .field-items {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 14px;
+  }
+}
 @media (max-width: 768px) {
   .node-type-job .view-mode-job_details_carer .field-name-field-description,
   .node-type-job .view-mode-job_details_agency_ .field-name-field-description,
@@ -9076,6 +9086,25 @@ ul.tabs--primary {
   font-size: 110%;
   margin: 3px 0 0 15px;
 }
+.jobs-list.carer-list .views-row .views-field.views-field-field-district {
+  margin: 0 0 1em;
+  font-size: 100%;
+}
+.jobs-list.carer-list .views-row .views-field.views-field-field-district span {
+  display: block;
+  float: left;
+  width: 150px;
+  clear: none;
+  margin: 0;
+}
+.jobs-list.carer-list .views-row .views-field.views-field-field-district .field-content {
+  display: block;
+  float: left;
+  clear: none;
+  width: calc(100% - 150px);
+  margin: 0;
+  font-weight: 500;
+}
 .carer-list .views-row .views-field.views-field-field-district .field-content {
   display: inline-block;
 }
@@ -9084,6 +9113,7 @@ ul.tabs--primary {
 }
 .carer-list .views-row .views-field.views-field-field-description {
   overflow: visible;
+  margin-bottom: 1em;
 }
 .carer-list .views-row .views-field.views-field-field-description .field-content {
   margin-left: 0;
@@ -9255,12 +9285,12 @@ ul.tabs--primary {
   }
   .carer-list .views-row .group-top {
     float: left;
-    width: 50%;
+    width: 100%;
     padding-top: 14px;
   }
   .carer-list .views-row .group-top-2 {
     float: left;
-    width: 50%;
+    width: 100%;
     padding-top: 14px;
   }
 }
@@ -10372,7 +10402,8 @@ button[value="Publish"] .badge {
 }
 #content-bottom {
   background: #b4d1ea;
-  padding: 40px 0;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 #content-bottom .region-content-bottom {
   margin-right: auto;
@@ -10443,39 +10474,6 @@ footer.footer .region-footer > .navbar-collapse {
 @media (min-width: 768px) {
   footer.footer .region-footer > .navbar-header,
   footer.footer .region-footer > .navbar-collapse {
-    margin-right: 0;
-    margin-left: 0;
-  }
-}
-footer.footer .region-footer .block-inner {
-  margin-right: auto;
-  margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-@media (min-width: 768px) {
-  footer.footer .region-footer .block-inner {
-    width: 750px;
-  }
-}
-@media (min-width: 992px) {
-  footer.footer .region-footer .block-inner {
-    width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  footer.footer .region-footer .block-inner {
-    width: 1170px;
-  }
-}
-footer.footer .region-footer .block-inner > .navbar-header,
-footer.footer .region-footer .block-inner > .navbar-collapse {
-  margin-right: -15px;
-  margin-left: -15px;
-}
-@media (min-width: 768px) {
-  footer.footer .region-footer .block-inner > .navbar-header,
-  footer.footer .region-footer .block-inner > .navbar-collapse {
     margin-right: 0;
     margin-left: 0;
   }

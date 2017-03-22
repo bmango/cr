@@ -12,8 +12,9 @@
 			resizeHeader();
 
 			function resizeHeader() {
-			$("#push-header").height($("#navbar").height() - 53);  //53 is body top padding - overides.less - line 56
+				$("#push-header").height($("#navbar").height() - 53);  //53 is body top padding - overides.less - line 56
 			}
+
 			//$(document).ready(resizeHeader);
 			$(window).resize(resizeHeader);
 			// PartialBorder();

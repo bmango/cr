@@ -707,6 +707,16 @@ fieldset.captcha {
 		}
 
 		.field-name-field-description {
+			.field-items {
+				margin-left: 0;
+			}
+			.field-items {
+				@media @tablet {
+					border-bottom: 1px solid #ccc;
+					padding-bottom: 14px;
+				}
+			}
+
 			@media (max-width: @screen-tablet) {
 				border: 1px solid #ddd;
 				border-top-left-radius: 5px;
@@ -963,6 +973,28 @@ ul.tabs--primary {
 				font-size: 110%;
 				margin: 3px 0 0 15px;
 
+				.jobs-list& {
+					margin: 0 0 1em;
+					font-size: 100%;
+
+					span {
+						display: block;
+						float: left;
+						width: 150px;
+						clear: none;
+						margin: 0;
+					}
+
+					.field-content {
+						display: block;
+						float: left;
+						clear: none;
+						width: calc(~"100% - 150px");
+						margin: 0;
+						font-weight: 500;
+					}
+				}
+
 				.field-content {
 					display: inline-block;
 				}
@@ -974,6 +1006,7 @@ ul.tabs--primary {
 
 			&.views-field-field-description {
 				overflow: visible;
+				margin-bottom: 1em;
 
 				.field-content {
 					margin-left: 0;
@@ -1145,13 +1178,13 @@ ul.tabs--primary {
 
 			.group-top {
 				float:left;
-				width:50%;
+				width:100%;
 				padding-top:14px;
 			}
 
 			.group-top-2 {
 				float:left;
-				width:50%;
+				width:100%;
 				padding-top:14px;
 			}
 		}
@@ -1741,7 +1774,8 @@ button[value="Publish"] {
 
 #content-bottom {
 	background: lighten(@brand-primary, 35%);
-	padding: 40px 0;
+	padding-top: 40px;
+	padding-bottom: 40px;
 
 	.region-content-bottom {
 		.container;
@@ -1759,7 +1793,7 @@ footer.footer {
 		.container;
 
 		.block-inner {
-			.container;
+			//.container;
 			//.make-md-column(12);
 			//padding-top: 35px;
 			//padding-bottom: 35px;
