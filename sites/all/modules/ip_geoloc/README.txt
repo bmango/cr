@@ -5,6 +5,15 @@ This documentation concentrates on the installation and configuration of the
 IP Geolocation Views & Maps (IPGV&M) module. For an overall introduction see
 http://drupal.org/project/ip_geoloc.
 
+IMPORTANT:
+---------
+The Google Maps API, which include geolocation services, requires either a
+Google API Key or a Google Client ID. If you are using Leaflet maps you may
+still need a key when you use geolocation services also.
+Obtain a free API Key or Client ID here:
+https://developers.google.com/maps/documentation/javascript/get-api-key
+
+
 CONFIGURATION OF VIEW-BASED MAPS
 ================================
 Read this if you are using IPGV&M primarily for its Views mapping interface. If
@@ -15,9 +24,9 @@ Download and enable IPGV&M like any other module. Then visit its configuration
 page, .../admin/config/system/ip_geoloc.
 If you intend to use IPGV&M's built-in interface to Google Maps, untick all
 "Data collection option" boxes.
-If you intend to use IPGV&M with the OpenLayers or Leaflet modules and also wish
-to show and center on the visitor's HTML5 retrieved location, then you have two
-options:
+If you intend to use IPGV&M with the OpenLayers (v2) or Leaflet modules and also
+wish to show and center on the visitor's HTML5 retrieved location, then you have
+two options:
 a) tick the first "Data collection option" and select applicable roles below it
 b) enable the "Set my location" block, so visitors can center the map using
 their HTML5 location, or, using the same block type, a city or partial address,
@@ -196,6 +205,7 @@ When all's ok, you won't see any errors in the Status Report, i.e.
 
 OPENLAYERS TIPS
 ===============
+Use http://drupal.org/project/openlayers version 7.x-2.0 or 7.x-2.x.
 Of the modules in the OpenLayers package you only need to enable OpenLayers and
 OpenLayers UI. In fact, you could even disable OpenLayers UI when you're done
 configuring your maps.
@@ -346,6 +356,10 @@ HIGH PERFORMANCE AJAX
 =====================
 IPGV&M will take advantage of the "High-performance Javascript callback
 handler" (7.x-2.x), if installed.
+
+NOTE: the 7.x-2.x version of https://drupal.org/project/js has not been
+working very well with IPGV&M lately. We discourage using it with IPGV&M
+
 Installation instructions for Nginx: http://drupal.org/node/1876418
 Installation instructions for Apache: 
 o download and enable https://drupal.org/project/js, version 7.x-2.x
@@ -368,16 +382,19 @@ CONDITIONAL LOCATION FIELDS
 Here's a great example on how to use IPGV&M in combination with the Views
 Conditional module https://www.drupal.org/node/2470265 (solution in entry #4).
 
-CONTEXT SESSION MODULE
-======================
-You can switch context (as in the https://www.drupal.org/project/context module)
-based on any location component, if you also enable
-https://www.drupal.org/project/context_session.
+CONTEXT AND CONTEXT-SESSION MODULES
+===================================
+IPGV&M implements a "Locate visitor using GPS/Wifi" reaction for the Context
+module, https://www.drupal.org/project/context.
+If you also use enable the https://www.drupal.org/project/context_mobile_detect
+module, then you can locate a visitor only when they're using, say, a phone or
+tablet and only on certain pages (using Context's path condition).
 
+You can also switch context using any address component as a condition, if you
+also enable https://www.drupal.org/project/context_session.
 Example: "location.locality=Melbourne"
-
-context_session does not support the Session Cache API module, so the $_SESSION
-variable will be used internally for storage.
+context_session does not support the Session Cache API module, so, if you use it
+the $_SESSION variable will still be used internally for storage.
 
 ALTERNATIVE THROBBER
 ====================
@@ -413,9 +430,10 @@ this:
 Note that, in order to see any meaningful session data when running on a local
 server (127.0.0.1), you must be connected to the internet and have ticked at
 Configuration >> IP Geolocation Views and Maps the data collection option
-"Employ the Google Maps API to reverse-geocode lat/long coordinates to street
-addresses". When debugging it is also recommended to activate on the same page
-the advanced option "Detail execution progress with status messages".
+"Employ a free Google service to periodically auto reverse-geocode visitor
+locations to street addresses". When debugging it is also recommended to
+activate on the same page the advanced option "Detail execution progress with
+status messages".
 
 See ip_geoloc.api.php for functions to retrieve and respond to lat/long and
 address information and to generate maps. Below are some of the functions

@@ -251,6 +251,18 @@ Title Desc|Z -> A</pre> Leave the replacement text blank to remove an option alt
         ),
         '#description' => t('Places this element in the secondary options portion of the exposed form.'),
       );
+
+      $bef_options['sort']['advanced']['autosubmit'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Autosubmit'),
+        '#default_value' => $existing['sort']['advanced']['autosubmit'],
+        '#states' => array(
+          'disabled' => array(
+            ':input[name="exposed_form_options[autosubmit]"]' => array('checked' => TRUE),
+          ),
+        ),
+        '#description' => t('Automatically submit the form once a sort element is changed. This option is not available if you enabled autosubmit option for the whole form.'),
+      );
     }
 
     /*
@@ -460,6 +472,9 @@ Title Desc|Z -> A</pre> Leave the replacement text blank to remove an option alt
         $display_options['bef_hidden'] = t('Hidden');
       }
 
+      // Alter the list of available display options for this filter.
+      drupal_alter('better_exposed_filters_display_options', $display_options, $filter);
+
       $filter_key = $filter->options['is_grouped'] ? 'group_info' : 'expose';
       $identifier = '"' . $filter->options[$filter_key]['identifier'] . '"';
       if (!empty($filter->options[$filter_key]['label'])) {
@@ -617,6 +632,19 @@ Title Desc|Z -> A</pre> Leave the replacement text blank to remove an option alt
           ),
         );
       }
+
+      // Individual element autosubmit option.
+      $bef_options[$label]['more_options']['autosubmit'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Autosubmit'),
+        '#default_value' => $existing[$label]['more_options']['autosubmit'],
+        '#states' => array(
+          'disabled' => array(
+            ':input[name="exposed_form_options[autosubmit]"]' => array('checked' => TRUE),
+          ),
+        ),
+        '#description' => t('Automatically submit the form once a filter element is changed. This option is not available if you enabled autosubmit option for the whole form.'),
+      );
 
       // Allow any filter to be moved into the secondary options fieldset.
       $bef_options[$label]['more_options']['is_secondary'] = array(
@@ -777,6 +805,7 @@ dateFormat: "dd-mm-yy"
       'datepicker' => FALSE,
       'slider' => FALSE,
       'settings' => array(),
+      'autosubmit' => FALSE,
     );
 
     // Some widgets will require additional CSS.
@@ -1051,6 +1080,16 @@ dateFormat: "dd-mm-yy"
         }
       }
     }
+
+    // Apply autosubmit sort values.
+    if (empty($this->options['autosubmit']) && !empty($settings['sort']['advanced']['autosubmit'])) {
+      $bef_js['autosubmit'] = TRUE;
+      foreach (array($settings['sort']['advanced']['combine_param'], 'sort_by', 'sort_order') as $elem) {
+        if (!empty($form[$elem])) {
+          $form[$elem] = array_merge_recursive($form[$elem], array('#attributes' => array('class' => array('ctools-auto-submit'))));
+        }
+      }
+    }
     /* Ends: if (isset($settings['sort'])) { */
 
     /*
@@ -1117,9 +1156,8 @@ dateFormat: "dd-mm-yy"
         // Collect replacement data.
         $data = array();
         $available = $options['more_options']['tokens']['available'];
-        if (in_array('vocabulary', $available)) {
-          $vocabs = taxonomy_get_vocabularies();
-          $data['vocabulary'] = $vocabs[$filters[$label]->options['vid']];
+        if (in_array('vocabulary', $available) && isset($filters[$label]->definition['vocabulary'])) {
+          $data['vocabulary'] = taxonomy_vocabulary_machine_name_load($filters[$label]->definition['vocabulary']);
         }
         /* Others? */
 
@@ -1635,7 +1673,7 @@ dateFormat: "dd-mm-yy"
             }
             $terms = taxonomy_term_load_multiple($tids);
             foreach ($terms as $tid => $term) {
-              $form[$filter_id]['#bef_term_descriptions'][$tid] = $term->description;
+              $form[$filter_id]['#bef_term_descriptions'][$tid] = check_markup($term->description, $term->format, '', TRUE);
             }
           }
           break;
@@ -1672,6 +1710,19 @@ dateFormat: "dd-mm-yy"
       }
       /* Ends switch ($options['bef_format']) */
 
+      // Apply autosubmit filter values.
+      if (empty($this->options['autosubmit']) && !empty($options['more_options']['autosubmit'])) {
+        $bef_js['autosubmit'] = TRUE;
+
+        // Check type form element.
+        if (isset($form[$filter_id]['value'])) {
+          $form[$filter_id]['value'] = array_merge_recursive($form[$filter_id]['value'], array('#attributes' => array('class' => array('ctools-auto-submit'))));
+        }
+        else {
+          $form[$filter_id] = array_merge_recursive($form[$filter_id], array('#attributes' => array('class' => array('ctools-auto-submit'))));
+        }
+      }
+
       // Override "Any" label, if applicable.
       if (!empty($options['more_options']['any_label']) && !empty($form[$filter_id]['#options']['All'])) {
         $form[$filter_id]['#options']['All'] = $options['more_options']['any_label'];
@@ -1690,11 +1741,11 @@ dateFormat: "dd-mm-yy"
             // Some elements can have multiple children, for example min/max
             // fields on an in-between filter. In those cases Add the label
             // to the first element.
-            $secondary[$identifier][$children[0]]['#title'] = $form['#info'][$filter_key]['label'];
+            $secondary[$identifier][$children[0]]['#title'] = isset($form['#info'][$filter_key]['label']) ? $form['#info'][$filter_key]['label'] : '';
             unset($form['#info'][$filter_key]);
           }
           else {
-            $secondary[$identifier]['#title'] = $form['#info'][$filter_key]['label'];
+            $secondary[$identifier]['#title'] = isset($form['#info'][$filter_key]['label']) ? $form['#info'][$filter_key]['label'] : '';
             unset($form['#info'][$filter_key]);
           }
 
@@ -1740,6 +1791,11 @@ dateFormat: "dd-mm-yy"
       }
       if ($bef_js['slider']) {
         drupal_add_library('system', 'ui.slider');
+      }
+      if ($bef_js['autosubmit']) {
+        $form['submit']['#attributes']['class'][] = 'ctools-use-ajax';
+        $form['submit']['#attributes']['class'][] = 'ctools-auto-submit-click';
+        $form['#attached']['js'][] = drupal_get_path('module', 'ctools') . '/js/auto-submit.js';
       }
 
       drupal_add_js(array('better_exposed_filters' => $bef_js), 'setting');
@@ -1894,6 +1950,7 @@ dateFormat: "dd-mm-yy"
           'reset' => FALSE,
           'reset_label' => '',
           'is_secondary' => FALSE,
+          'autosubmit' => FALSE,
         ),
       ),
       'pager' => array(
@@ -1921,6 +1978,7 @@ dateFormat: "dd-mm-yy"
         'bef_filter_description' => '',
         'any_label' => '',
         'bef_term_description' => FALSE,
+        'autosubmit' => FALSE,
         'tokens' => array(
           'list' => array(),
           'available' => array(),

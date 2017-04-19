@@ -4,9 +4,9 @@ core = 7.x
 dependencies[] = payment
 package = Payment
 files[] = paymentmethodbasic.module
-; Information added by Drupal.org packaging script on 2015-06-24
-version = "7.x-1.15"
+; Information added by Drupal.org packaging script on 2016-07-08
+version = "7.x-1.16"
 core = "7.x"
 project = "payment"
-datestamp = "1435153692"
+datestamp = "1467988822"
 

@@ -12,6 +12,69 @@ function ip_geoloc_admin_configure() {
 
   global $base_url;
 
+  $form['ip_geoloc_google_auth'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Authentication of maps and geolocation services'),
+    '#description' => t('The <a target="_blank" href="!url1">Google Maps API</a>, which include geolocation services, requires either a Google API Key or a Google Client ID. <br/>If you are using <a target="_blank" href="!url2">Leaflet maps</a> you may still need a Google API Key or Client ID when you use this module\'s geolocation services also.', array(
+      '!url1' => url('https://developers.google.com/maps/documentation/javascript/get-api-key'),
+      '!url2' => url('http://leafletjs.com'),
+    )),
+  );
+
+  $form['ip_geoloc_google_auth']['ip_geoloc_auth_method'] = array(
+    '#type' => 'select',
+    '#title' => t('Select Google API Authentication Method'),
+    '#description' => t('Google API Authentication Method'),
+    '#default_value' => variable_get('ip_geoloc_auth_method', 1),
+    '#options' => array(
+      1 => t('API Key'),
+      2 => t('Client ID'),
+    ),
+  );
+
+  $form['ip_geoloc_google_auth']['ip_geoloc_apikey'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Google Maps API Key'),
+    '#description' => t('Obtain a Google Maps Javascript API key <a href="!url">here</a>.', array(
+      '!url' => url('https://developers.google.com/maps/documentation/javascript/get-api-key'),
+    )),
+    '#default_value' => variable_get('ip_geoloc_apikey', ''),
+    '#required' => FALSE,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="ip_geoloc_auth_method"]' => array('value' => 1),
+      ),
+    ),
+  );
+
+  $form['ip_geoloc_google_auth']['ip_geoloc_client_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Google Client ID'),
+    '#description' => t('For more information, visit <a href="!url">this page</a>.', array(
+      '!url' => url('https://developers.google.com/maps/documentation/javascript/get-api-key#client-id'),
+     )),
+    '#default_value' => variable_get('ip_geoloc_client_id', ''),
+    '#required' => FALSE,
+    '#states' => array(
+      'visible' => array(
+         ':input[name="ip_geoloc_auth_method"]' => array('value' => 2),
+      ),
+    ),
+  );
+
+  $form['ip_geoloc_google_auth']['ip_geoloc_signature'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Google Signature'),
+    '#description' => t('May not be required. Check the Google documentation.'),
+    '#default_value' => variable_get('ip_geoloc_signature', ''),
+    '#required' => FALSE,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="ip_geoloc_auth_method"]' => array('value' => 2),
+      ),
+    ),
+  );
+
   $form['markers'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
@@ -127,14 +190,29 @@ function ip_geoloc_admin_configure() {
     '#type' => 'checkbox',
     '#title' => t('Store reverse-geocoded addresses with their corresponding latitude/longitude on the database'),
     '#default_value' => variable_get('ip_geoloc_store_addresses', TRUE),
-    '#description' => t('This allows you create maps of recent visitors to your site.'),
+    '#description' => t('This allows you to create maps of recent visitors to your site.'),
   );
-  $note = t('If you are using this module mainly for its mapping features, then you can safely untick this box.');
+  $note1 = t('Untick, if you do not need periodic visitor location updates. Consider the <em>Set my location</em> block as an alternative.');
+  $note2 = t('You can also use the <a href="@project_context">Context module</a> to conditionally geolocate the visitor based on device type, page visited etc.', array('@project_context' => url('http://drupal.org/project/context')));
+  $note3 = ''; // t('Used in conjunction with the options below.');
   $form['ip_geoloc_data_collection_options']['ip_geoloc_google_to_reverse_geocode'] = array(
     '#type' => 'checkbox',
     '#title' => t('Employ a free Google service to <em>periodically</em> auto reverse-geocode visitor locations to street addresses'),
     '#default_value' => variable_get('ip_geoloc_google_to_reverse_geocode', FALSE),
-    '#description' => "<strong>$note</strong><br>" . t('Reverse-geocoding takes place via the Javascript version of the Google Maps API and the HTML5 way of obtaining a visitor\'s location. This involves visitors being prompted to accept sharing of their location.<br/>For the upload of historic visitor location data the server-side version of the Google Maps API is used. The latter is subject to a Google-imposed daily limit on the number of calls coming from the same server.'),
+    '#description' => "$note1<br>$note2<br/>"
+      . t('Reverse-geocoding takes place via the Javascript version of the Google Maps API and the HTML5 way of obtaining a visitor\'s location. This involves visitors being prompted to accept sharing of their location.<br/>For the upload of historic visitor location data the server-side version of the Google Maps API is used. The latter is subject to a Google-imposed daily limit on the number of calls coming from the same server.')
+      . '<br/>' . $note3,
+    '#states' => array(
+      'visible' => array('input[name="ip_geoloc_allow_session_storage"]' => array('checked' => TRUE)),
+    ),
+  );
+  $form['ip_geoloc_data_collection_options']['ip_geoloc_location_check_interval'] = array(
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#field_suffix' => t('seconds'),
+    '#title' => t('Minimum elapsed time before geolocation data for the same user will be collected again'),
+    '#default_value' => variable_get('ip_geoloc_location_check_interval', IP_GEOLOC_LOCATION_CHECK_INTERVAL),
+    '#description' => t('Operates in combination with the checkbox above. Geolocation information associated with an IP address may change over time, for instance when the visitor is using a mobile device and is moving. Use zero to geolocate the visitor <em>once</em> and then refrain from repeat location collection until their session has expired.'),
     '#states' => array(
       'visible' => array('input[name="ip_geoloc_allow_session_storage"]' => array('checked' => TRUE)),
     ),
@@ -181,22 +259,11 @@ function ip_geoloc_admin_configure() {
       'visible' => array('input[name="ip_geoloc_allow_session_storage"]' => array('checked' => TRUE)),
     ),
   );
-  $form['ip_geoloc_data_collection_options']['ip_geoloc_location_check_interval'] = array(
-    '#type' => 'textfield',
-    '#size' => 10,
-    '#field_suffix' => t('seconds'),
-    '#title' => t('Minimum elapsed time before geolocation data for the same user will be collected again'),
-    '#default_value' => variable_get('ip_geoloc_location_check_interval', IP_GEOLOC_LOCATION_CHECK_INTERVAL),
-    '#description' => t('Geolocation information associated with an IP address may change over time, for instance when the visitor is using a mobile device and is moving. Use zero to geolocate the visitor <em>once</em> and then refrain from repeat location collection until their session has expired.'),
-    '#states' => array(
-      'visible' => array('input[name="ip_geoloc_allow_session_storage"]' => array('checked' => TRUE)),
-    ),
-  );
   $form['ip_geoloc_data_collection_options']['ip_geoloc_throbber_text2'] = array(
     '#type' => 'textfield',
     '#title' => t('Message displayed while visitor is being geolocated'),
     '#size' => 30,
-    '#default_value' => filter_xss_admin(variable_get('ip_geoloc_throbber_text2', '')),
+    '#default_value' => variable_get('ip_geoloc_throbber_text2', ''),
     '#description' => t('A standard status message to show the visitor that geolocation was initiated and is in progress. </br/>Defaults to %default <br/>You may use most HTML tags. Use <em>&lt;none&gt;</em> to have no message shown, which is probably the preferred choice if the <strong>Auto-refresh</strong> box below is unticked.', array(
       '%default' => IP_GEOLOC_THROBBER_DEFAULT_TEXT,
     )),

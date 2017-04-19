@@ -524,7 +524,7 @@ function logintoboggan_user_register_submit($form, &$form_state) {
   _user_mail_notify($mailkey, $account);
 
   //stop message from being show on register for agencies
-  if(isset($account->profile_carer)) {
+  if(!isset($account->profile_agency)) {
     drupal_set_message($message);
   }
 

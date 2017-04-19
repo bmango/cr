@@ -17,18 +17,3 @@ function test_theme_theme_test__suggestion($variables) {
 function test_theme_theme_test_alter_alter(&$data) {
   $data = 'test_theme_theme_test_alter_alter was invoked';
 }
-
-/**
- * Implements hook_element_info_alter().
- */
-function test_theme_element_info_alter(&$elements) {
-  array_unshift($elements['item']['#pre_render'], 'test_theme_link_pre_render');
-}
-
-/**
- * Test pre-render callback for the link element.
- */
-function test_theme_link_pre_render($element) {
-  $element['#markup'] = 'hook_element_info_alter() invoked in themes!';
-  return $element;
-}

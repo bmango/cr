@@ -9,11 +9,10 @@
  * Implments hook_enable().
  */
 function ip_geoloc_enable() {
-  drupal_set_message(t('IP Geolocation Views & Maps is now enabled. Please note that some of the canned Views that come with this module require the "<a target="project_page" href="!views_php">Views PHP</a>" module. The "Set my location" block requires <a target="project_page" href="!geocoder">Geocoder</a>. <br/>Modules "<a target="project_page" href="!session_cache">Session Cache API</a>" and "<a target="project_page" href="!js">High-performance JS Callback Handler</a>" are optional and recommended.', array(
+  drupal_set_message(t('IP Geolocation Views & Maps is now enabled. Please note that some of the canned Views that come with this module require the "<a target="project_page" href="!views_php">Views PHP</a>" module. The "Set my location" block requires <a target="project_page" href="!geocoder">Geocoder</a>. <br/>Module "<a target="project_page" href="!session_cache">Session Cache API</a>" is optional and recommended.', array(
     '!views_php' => url('http://drupal.org/project/views_php'),
     '!geocoder' => url('http://drupal.org/project/geocoder'),
     '!session_cache' => url('http://drupal.org/project/session_cache'),
-    '!js' => url('http://drupal.org/project/js'),
   )));
 }
 
@@ -113,6 +112,28 @@ function ip_geoloc_requirements($phase) {
       '!url_fsymbols' => url('http://text-symbols.com'),
     ));
   }
+
+  switch (variable_get('ip_geoloc_auth_method', 0)) {
+    case 1:
+      $key_provided = variable_get('ip_geoloc_apikey', FALSE);
+      break;
+
+    case 2:
+      $key_provided = variable_get('ip_geoloc_client_id', FALSE);
+      break;
+
+    default:
+  }
+  if (empty($key_provided)) {
+    $requirements['ip_geoloc_map'] = array(
+      'title' => 'IP Geolocation Views & Maps',
+      'severity' => REQUIREMENT_WARNING,
+      'value' => t('No Google Maps API Key or Client ID. Keyless access to Google Maps is no longer supported and may impact rendering of maps. Obtain and enter an API Key or Client ID <a href="!url">here</a>.', array(
+        '!url' => url('admin/config/system/ip_geoloc')
+      )),
+    );
+  }
+
   return $requirements;
 }
 
