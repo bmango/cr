@@ -297,7 +297,12 @@ class views_handler_relationship_groupwise_max extends views_handler_relationshi
       // If the correlated placeholder has been located, replace it with the
       // outer field name.
       elseif ($val === '**CORRELATED**') {
-        $quoted[$key] = $this->definition['outer field'];
+        if ($this->relationship) {
+          $quoted[$key] = str_replace($this->definition['argument table'], $this->relationship, $this->definition['outer field']);
+        }
+        else {
+          $quoted[$key] = $this->definition['outer field'];
+        }
       }
       else {
         $quoted[$key] = $connection->quote($val);
