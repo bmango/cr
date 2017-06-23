@@ -7,7 +7,7 @@
 $api = '2.0.0';
 
 $data = $view = new view();
-$view->name = 'messages';
+$view->name = 'Messages';
 $view->description = '';
 $view->tag = 'default';
 $view->base_table = 'node';
@@ -422,6 +422,191 @@ $handler->display->display_options['arguments']['uid']['summary_options']['items
 $handler->display->display_options['arguments']['uid']['specify_validation'] = TRUE;
 $handler->display->display_options['arguments']['uid']['validate']['fail'] = 'access denied';
 $handler->display->display_options['path'] = 'messages';
+
+/* Display: Messages-test */
+$handler = $view->new_display('page', 'Messages-test', 'page_1');
+$handler->display->display_options['defaults']['title'] = FALSE;
+$handler->display->display_options['title'] = 'My Messages';
+$handler->display->display_options['defaults']['query'] = FALSE;
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['distinct'] = TRUE;
+$handler->display->display_options['query']['options']['contextual_filters_or'] = TRUE;
+$handler->display->display_options['defaults']['relationships'] = FALSE;
+/* Relationship: Users */
+$handler->display->display_options['relationships']['uid']['id'] = 'uid';
+$handler->display->display_options['relationships']['uid']['table'] = 'node';
+$handler->display->display_options['relationships']['uid']['field'] = 'uid';
+$handler->display->display_options['relationships']['uid']['ui_name'] = 'Users';
+$handler->display->display_options['relationships']['uid']['label'] = 'users';
+$handler->display->display_options['relationships']['uid']['required'] = TRUE;
+/* Relationship: User: Profile */
+$handler->display->display_options['relationships']['profile']['id'] = 'profile';
+$handler->display->display_options['relationships']['profile']['table'] = 'users';
+$handler->display->display_options['relationships']['profile']['field'] = 'profile';
+$handler->display->display_options['relationships']['profile']['relationship'] = 'uid';
+$handler->display->display_options['relationships']['profile']['required'] = TRUE;
+/* Relationship: Job */
+$handler->display->display_options['relationships']['uid_representative']['id'] = 'uid_representative';
+$handler->display->display_options['relationships']['uid_representative']['table'] = 'users';
+$handler->display->display_options['relationships']['uid_representative']['field'] = 'uid_representative';
+$handler->display->display_options['relationships']['uid_representative']['relationship'] = 'uid';
+$handler->display->display_options['relationships']['uid_representative']['ui_name'] = 'Job';
+$handler->display->display_options['relationships']['uid_representative']['subquery_sort'] = 'node.nid';
+$handler->display->display_options['relationships']['uid_representative']['subquery_regenerate'] = TRUE;
+$handler->display->display_options['relationships']['uid_representative']['subquery_view'] = 'messages_subquery';
+$handler->display->display_options['relationships']['uid_representative']['subquery_namespace'] = '';
+/* Relationship: user_to */
+$handler->display->display_options['relationships']['field_to_target_id']['id'] = 'field_to_target_id';
+$handler->display->display_options['relationships']['field_to_target_id']['table'] = 'field_data_field_to';
+$handler->display->display_options['relationships']['field_to_target_id']['field'] = 'field_to_target_id';
+$handler->display->display_options['relationships']['field_to_target_id']['ui_name'] = 'user_to';
+$handler->display->display_options['relationships']['field_to_target_id']['label'] = 'user_to';
+$handler->display->display_options['relationships']['field_to_target_id']['required'] = TRUE;
+/* Relationship: Profile_to */
+$handler->display->display_options['relationships']['profile_1']['id'] = 'profile_1';
+$handler->display->display_options['relationships']['profile_1']['table'] = 'users';
+$handler->display->display_options['relationships']['profile_1']['field'] = 'profile';
+$handler->display->display_options['relationships']['profile_1']['relationship'] = 'field_to_target_id';
+$handler->display->display_options['relationships']['profile_1']['ui_name'] = 'Profile_to';
+$handler->display->display_options['relationships']['profile_1']['label'] = 'Profile_to';
+$handler->display->display_options['relationships']['profile_1']['required'] = TRUE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Field: Field: First Name */
+$handler->display->display_options['fields']['field_first_name_em']['id'] = 'field_first_name_em';
+$handler->display->display_options['fields']['field_first_name_em']['table'] = 'field_data_field_first_name_em';
+$handler->display->display_options['fields']['field_first_name_em']['field'] = 'field_first_name_em';
+$handler->display->display_options['fields']['field_first_name_em']['relationship'] = 'profile';
+$handler->display->display_options['fields']['field_first_name_em']['label'] = '';
+$handler->display->display_options['fields']['field_first_name_em']['exclude'] = TRUE;
+$handler->display->display_options['fields']['field_first_name_em']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_first_name_em']['settings'] = array(
+  'empty_fields_handler' => '',
+  'empty_fields_emptyfieldtext_empty_text' => '',
+);
+/* Field: Field: First Name */
+$handler->display->display_options['fields']['field_first_name_em_1']['id'] = 'field_first_name_em_1';
+$handler->display->display_options['fields']['field_first_name_em_1']['table'] = 'field_data_field_first_name_em';
+$handler->display->display_options['fields']['field_first_name_em_1']['field'] = 'field_first_name_em';
+$handler->display->display_options['fields']['field_first_name_em_1']['relationship'] = 'profile_1';
+$handler->display->display_options['fields']['field_first_name_em_1']['exclude'] = TRUE;
+$handler->display->display_options['fields']['field_first_name_em_1']['settings'] = array(
+  'field_formatter_label' => '',
+);
+/* Field: To */
+$handler->display->display_options['fields']['field_surname_initial_1']['id'] = 'field_surname_initial_1';
+$handler->display->display_options['fields']['field_surname_initial_1']['table'] = 'field_data_field_surname_initial';
+$handler->display->display_options['fields']['field_surname_initial_1']['field'] = 'field_surname_initial';
+$handler->display->display_options['fields']['field_surname_initial_1']['relationship'] = 'profile_1';
+$handler->display->display_options['fields']['field_surname_initial_1']['ui_name'] = 'To';
+$handler->display->display_options['fields']['field_surname_initial_1']['label'] = 'To';
+$handler->display->display_options['fields']['field_surname_initial_1']['exclude'] = TRUE;
+$handler->display->display_options['fields']['field_surname_initial_1']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['field_surname_initial_1']['alter']['text'] = '[field_first_name_em_1] [field_surname_initial_1]';
+$handler->display->display_options['fields']['field_surname_initial_1']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_surname_initial_1']['type'] = 'field_hidden_text_plain';
+$handler->display->display_options['fields']['field_surname_initial_1']['settings'] = array(
+  'field_formatter_label' => '',
+);
+/* Field: Field: Company */
+$handler->display->display_options['fields']['field_company']['id'] = 'field_company';
+$handler->display->display_options['fields']['field_company']['table'] = 'field_data_field_company';
+$handler->display->display_options['fields']['field_company']['field'] = 'field_company';
+$handler->display->display_options['fields']['field_company']['relationship'] = 'profile_1';
+$handler->display->display_options['fields']['field_company']['label'] = 'To';
+$handler->display->display_options['fields']['field_company']['empty'] = '[field_surname_initial_1]';
+$handler->display->display_options['fields']['field_company']['settings'] = array(
+  'field_formatter_label' => '',
+);
+/* Field: Field: Surname Initial */
+$handler->display->display_options['fields']['field_surname_initial']['id'] = 'field_surname_initial';
+$handler->display->display_options['fields']['field_surname_initial']['table'] = 'field_data_field_surname_initial';
+$handler->display->display_options['fields']['field_surname_initial']['field'] = 'field_surname_initial';
+$handler->display->display_options['fields']['field_surname_initial']['relationship'] = 'profile';
+$handler->display->display_options['fields']['field_surname_initial']['label'] = 'From';
+$handler->display->display_options['fields']['field_surname_initial']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['field_surname_initial']['alter']['text'] = '[field_first_name_em] [field_surname_initial]';
+$handler->display->display_options['fields']['field_surname_initial']['type'] = 'field_hidden_text_plain';
+$handler->display->display_options['fields']['field_surname_initial']['settings'] = array(
+  'empty_fields_handler' => '',
+  'empty_fields_emptyfieldtext_empty_text' => '',
+);
+/* Field: Content: Link */
+$handler->display->display_options['fields']['view_node']['id'] = 'view_node';
+$handler->display->display_options['fields']['view_node']['table'] = 'views_entity_node';
+$handler->display->display_options['fields']['view_node']['field'] = 'view_node';
+$handler->display->display_options['fields']['view_node']['label'] = '';
+$handler->display->display_options['fields']['view_node']['exclude'] = TRUE;
+$handler->display->display_options['fields']['view_node']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['view_node']['text'] = 'View message';
+/* Field: Content: New comments */
+$handler->display->display_options['fields']['new_comments']['id'] = 'new_comments';
+$handler->display->display_options['fields']['new_comments']['table'] = 'node';
+$handler->display->display_options['fields']['new_comments']['field'] = 'new_comments';
+$handler->display->display_options['fields']['new_comments']['label'] = '';
+$handler->display->display_options['fields']['new_comments']['exclude'] = TRUE;
+$handler->display->display_options['fields']['new_comments']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['new_comments']['alter']['text'] = '<span class="marker label label-primary">new</span>';
+$handler->display->display_options['fields']['new_comments']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['new_comments']['hide_empty'] = TRUE;
+/* Field: Content: Has new content */
+$handler->display->display_options['fields']['timestamp']['id'] = 'timestamp';
+$handler->display->display_options['fields']['timestamp']['table'] = 'history';
+$handler->display->display_options['fields']['timestamp']['field'] = 'timestamp';
+$handler->display->display_options['fields']['timestamp']['label'] = '';
+$handler->display->display_options['fields']['timestamp']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['timestamp']['empty'] = '[new_comments]';
+/* Field: Content: Post date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'node';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['label'] = 'Sent';
+$handler->display->display_options['fields']['created']['date_format'] = 'medium';
+$handler->display->display_options['fields']['created']['second_date_format'] = 'long';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title_1']['id'] = 'title_1';
+$handler->display->display_options['fields']['title_1']['table'] = 'node';
+$handler->display->display_options['fields']['title_1']['field'] = 'title';
+$handler->display->display_options['fields']['title_1']['relationship'] = 'uid_representative';
+$handler->display->display_options['fields']['title_1']['label'] = '';
+$handler->display->display_options['fields']['title_1']['exclude'] = TRUE;
+$handler->display->display_options['fields']['title_1']['alter']['alter_text'] = TRUE;
+$handler->display->display_options['fields']['title_1']['alter']['text'] = 'View job details';
+$handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
+/* Field: Content: Author uid */
+$handler->display->display_options['fields']['uid_1']['id'] = 'uid_1';
+$handler->display->display_options['fields']['uid_1']['table'] = 'node';
+$handler->display->display_options['fields']['uid_1']['field'] = 'uid';
+$handler->display->display_options['fields']['uid_1']['exclude'] = TRUE;
+$handler->display->display_options['defaults']['arguments'] = FALSE;
+/* Contextual filter: Content: To (field_to) */
+$handler->display->display_options['arguments']['field_to_target_id']['id'] = 'field_to_target_id';
+$handler->display->display_options['arguments']['field_to_target_id']['table'] = 'field_data_field_to';
+$handler->display->display_options['arguments']['field_to_target_id']['field'] = 'field_to_target_id';
+$handler->display->display_options['arguments']['field_to_target_id']['default_action'] = 'default';
+$handler->display->display_options['arguments']['field_to_target_id']['default_argument_type'] = 'current_user';
+$handler->display->display_options['arguments']['field_to_target_id']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['field_to_target_id']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['field_to_target_id']['summary_options']['items_per_page'] = '25';
+$handler->display->display_options['arguments']['field_to_target_id']['specify_validation'] = TRUE;
+$handler->display->display_options['arguments']['field_to_target_id']['validate']['fail'] = 'access denied';
+/* Contextual filter: Content: Author uid */
+$handler->display->display_options['arguments']['uid']['id'] = 'uid';
+$handler->display->display_options['arguments']['uid']['table'] = 'node';
+$handler->display->display_options['arguments']['uid']['field'] = 'uid';
+$handler->display->display_options['arguments']['uid']['default_action'] = 'default';
+$handler->display->display_options['arguments']['uid']['default_argument_type'] = 'current_user';
+$handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
+$handler->display->display_options['arguments']['uid']['specify_validation'] = TRUE;
+$handler->display->display_options['arguments']['uid']['validate']['fail'] = 'access denied';
+$handler->display->display_options['path'] = 'messages-test';
 
 
 $dependencies = array();
