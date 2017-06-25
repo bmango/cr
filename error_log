@@ -142,3 +142,54 @@
 [22-Mar-2017 16:32:53 Europe/London] PHP  16. DrupalDatabaseCache->getMultiple() /home/carersregisterco/dev.carersregister.co.uk/includes/cache.inc:330
 [22-Mar-2017 16:32:53 Europe/London] PHP  17. DrupalDatabaseCache->prepareItem() /home/carersregisterco/dev.carersregister.co.uk/includes/cache.inc:352
 [22-Mar-2017 16:32:53 Europe/London] PHP  18. unserialize() /home/carersregisterco/dev.carersregister.co.uk/includes/cache.inc:439
+[25-Jun-2017 13:31:10 Europe/London] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 49152 bytes) in /home/carersregisterco/dev.carersregister.co.uk/sites/all/modules/paragraphs/paragraphs.field_widget.inc on line 150
+[25-Jun-2017 13:31:10 Europe/London] PHP Stack trace:
+[25-Jun-2017 13:31:10 Europe/London] PHP   1. {main}() /usr/local/bin/drush:0
+[25-Jun-2017 13:31:10 Europe/London] PHP   2. require() /usr/local/bin/drush:10
+[25-Jun-2017 13:31:10 Europe/London] PHP   3. drush_startup() phar:///usr/local/bin/drush/drush:114
+[25-Jun-2017 13:31:10 Europe/London] PHP   4. drush_run_main() phar:///usr/local/bin/drush/includes/startup.inc:365
+[25-Jun-2017 13:31:10 Europe/London] PHP   5. drush_main() phar:///usr/local/bin/drush/includes/startup.inc:458
+[25-Jun-2017 13:31:10 Europe/London] PHP   6. Drush\Boot\BaseBoot->bootstrap_and_dispatch() phar:///usr/local/bin/drush/includes/preflight.inc:66
+[25-Jun-2017 13:31:10 Europe/London] PHP   7. drush_bootstrap_to_phase() phar:///usr/local/bin/drush/lib/Drush/Boot/BaseBoot.php:59
+[25-Jun-2017 13:31:10 Europe/London] PHP   8. drush_bootstrap_max() phar:///usr/local/bin/drush/includes/bootstrap.inc:456
+[25-Jun-2017 13:31:10 Europe/London] PHP   9. drush_bootstrap() phar:///usr/local/bin/drush/includes/bootstrap.inc:509
+[25-Jun-2017 13:31:10 Europe/London] PHP  10. Drush\Boot\DrupalBoot7->bootstrap_drupal_full() phar:///usr/local/bin/drush/includes/bootstrap.inc:354
+[25-Jun-2017 13:31:10 Europe/London] PHP  11. drupal_bootstrap() phar:///usr/local/bin/drush/lib/Drush/Boot/DrupalBoot7.php:91
+[25-Jun-2017 13:31:10 Europe/London] PHP  12. _drupal_bootstrap_full() /home/carersregisterco/dev.carersregister.co.uk/includes/bootstrap.inc:2533
+[25-Jun-2017 13:31:10 Europe/London] PHP  13. module_load_all() /home/carersregisterco/dev.carersregister.co.uk/includes/common.inc:5274
+[25-Jun-2017 13:31:10 Europe/London] PHP  14. drupal_load() /home/carersregisterco/dev.carersregister.co.uk/includes/module.inc:24
+[25-Jun-2017 13:31:10 Europe/London] PHP  15. include_once() /home/carersregisterco/dev.carersregister.co.uk/includes/bootstrap.inc:1369
+[25-Jun-2017 13:32:16 Europe/London] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 49152 bytes) in /home/carersregisterco/dev.carersregister.co.uk/sites/all/modules/paragraphs/paragraphs.field_widget.inc on line 411
+[25-Jun-2017 13:32:16 Europe/London] PHP Stack trace:
+[25-Jun-2017 13:32:16 Europe/London] PHP   1. {main}() /usr/local/bin/drush:0
+[25-Jun-2017 13:32:16 Europe/London] PHP   2. require() /usr/local/bin/drush:10
+[25-Jun-2017 13:32:16 Europe/London] PHP   3. drush_startup() phar:///usr/local/bin/drush/drush:114
+[25-Jun-2017 13:32:16 Europe/London] PHP   4. drush_run_main() phar:///usr/local/bin/drush/includes/startup.inc:365
+[25-Jun-2017 13:32:16 Europe/London] PHP   5. drush_main() phar:///usr/local/bin/drush/includes/startup.inc:458
+[25-Jun-2017 13:32:16 Europe/London] PHP   6. Drush\Boot\BaseBoot->bootstrap_and_dispatch() phar:///usr/local/bin/drush/includes/preflight.inc:66
+[25-Jun-2017 13:32:16 Europe/London] PHP   7. drush_bootstrap_to_phase() phar:///usr/local/bin/drush/lib/Drush/Boot/BaseBoot.php:59
+[25-Jun-2017 13:32:16 Europe/London] PHP   8. drush_bootstrap_max() phar:///usr/local/bin/drush/includes/bootstrap.inc:456
+[25-Jun-2017 13:32:16 Europe/London] PHP   9. drush_bootstrap() phar:///usr/local/bin/drush/includes/bootstrap.inc:509
+[25-Jun-2017 13:32:16 Europe/London] PHP  10. Drush\Boot\DrupalBoot7->bootstrap_drupal_full() phar:///usr/local/bin/drush/includes/bootstrap.inc:354
+[25-Jun-2017 13:32:16 Europe/London] PHP  11. drupal_bootstrap() phar:///usr/local/bin/drush/lib/Drush/Boot/DrupalBoot7.php:91
+[25-Jun-2017 13:32:16 Europe/London] PHP  12. _drupal_bootstrap_full() /home/carersregisterco/dev.carersregister.co.uk/includes/bootstrap.inc:2533
+[25-Jun-2017 13:32:16 Europe/London] PHP  13. module_load_all() /home/carersregisterco/dev.carersregister.co.uk/includes/common.inc:5274
+[25-Jun-2017 13:32:16 Europe/London] PHP  14. drupal_load() /home/carersregisterco/dev.carersregister.co.uk/includes/module.inc:24
+[25-Jun-2017 13:32:16 Europe/London] PHP  15. include_once() /home/carersregisterco/dev.carersregister.co.uk/includes/bootstrap.inc:1369
+[25-Jun-2017 13:32:34 Europe/London] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 49152 bytes) in /home/carersregisterco/dev.carersregister.co.uk/sites/all/modules/paragraphs/paragraphs.field_widget.inc on line 411
+[25-Jun-2017 13:32:34 Europe/London] PHP Stack trace:
+[25-Jun-2017 13:32:34 Europe/London] PHP   1. {main}() /usr/local/bin/drush:0
+[25-Jun-2017 13:32:34 Europe/London] PHP   2. require() /usr/local/bin/drush:10
+[25-Jun-2017 13:32:34 Europe/London] PHP   3. drush_startup() phar:///usr/local/bin/drush/drush:114
+[25-Jun-2017 13:32:34 Europe/London] PHP   4. drush_run_main() phar:///usr/local/bin/drush/includes/startup.inc:365
+[25-Jun-2017 13:32:34 Europe/London] PHP   5. drush_main() phar:///usr/local/bin/drush/includes/startup.inc:458
+[25-Jun-2017 13:32:34 Europe/London] PHP   6. Drush\Boot\BaseBoot->bootstrap_and_dispatch() phar:///usr/local/bin/drush/includes/preflight.inc:66
+[25-Jun-2017 13:32:34 Europe/London] PHP   7. drush_bootstrap_to_phase() phar:///usr/local/bin/drush/lib/Drush/Boot/BaseBoot.php:59
+[25-Jun-2017 13:32:34 Europe/London] PHP   8. drush_bootstrap_max() phar:///usr/local/bin/drush/includes/bootstrap.inc:456
+[25-Jun-2017 13:32:34 Europe/London] PHP   9. drush_bootstrap() phar:///usr/local/bin/drush/includes/bootstrap.inc:509
+[25-Jun-2017 13:32:34 Europe/London] PHP  10. Drush\Boot\DrupalBoot7->bootstrap_drupal_full() phar:///usr/local/bin/drush/includes/bootstrap.inc:354
+[25-Jun-2017 13:32:34 Europe/London] PHP  11. drupal_bootstrap() phar:///usr/local/bin/drush/lib/Drush/Boot/DrupalBoot7.php:91
+[25-Jun-2017 13:32:34 Europe/London] PHP  12. _drupal_bootstrap_full() /home/carersregisterco/dev.carersregister.co.uk/includes/bootstrap.inc:2533
+[25-Jun-2017 13:32:34 Europe/London] PHP  13. module_load_all() /home/carersregisterco/dev.carersregister.co.uk/includes/common.inc:5274
+[25-Jun-2017 13:32:34 Europe/London] PHP  14. drupal_load() /home/carersregisterco/dev.carersregister.co.uk/includes/module.inc:24
+[25-Jun-2017 13:32:34 Europe/London] PHP  15. include_once() /home/carersregisterco/dev.carersregister.co.uk/includes/bootstrap.inc:1369
