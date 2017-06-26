@@ -1,0 +1,16 @@
+name = Drupal Sync Additional Taxonomy Rules module
+description = Provide rules based on taxonomy for synchronization entities between multiple sites
+package = Drupal Sync
+core = 7.x
+
+files[] = drupal_sync_additional.module
+
+configure = admin/config/drupal_sync/drupal_sync_additional_taxonomy_rules
+
+dependencies[] = drupal_sync
+; Information added by Drupal.org packaging script on 2016-06-20
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "drupal_sync"
+datestamp = "1466422496"
+

@@ -1,0 +1,16 @@
+name = Drupal Sync Initial Setup
+description = Module perform the initial synchronization and build relations between sites which already have content.
+package = Drupal Sync
+core = 7.x
+
+files[] = drupal_sync_initial_setup.module
+
+configure = admin/config/drupal_sync/drupal_sync_initial_setup
+
+dependencies[] = drupal_sync
+; Information added by Drupal.org packaging script on 2016-06-20
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "drupal_sync"
+datestamp = "1466422496"
+
