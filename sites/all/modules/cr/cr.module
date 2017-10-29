@@ -292,17 +292,10 @@ function cr_form_alter(&$form, $form_state, $form_id) {
         <br><br>We will send you an email to confirm your account cancellation. Please click on the link in the email to confirm you wish to cancel your account.';
       $form['actions']['submit']['#submit'][0] = 'cr_user_cancel_form_submit';
       break;
+    //case 'views_form_commerce_cart_form_default':
+      //$form['actions']['checkout']['#value'] = 'New checkout button label';
+      //break;
 	}
-}
-
-//add stripe subscription to employer register form
-function cr_form_user_register_form_alter(&$form, &$form_state) {
-  require_once drupal_get_path('module', 'stripe_subscription') . '/stripe_subscription.pages.inc';
-  require_once drupal_get_path('module', 'stripe_subscription') . '/stripe_subscription.module';
-  if (arg(0) == 'employer' && user_is_anonymous()) {
-    // Add the subscription form to the bottom of the registration form.
-    $form = stripe_subscription_subscription_form($form, $form_state);
-  }
 }
 
 //redirect carers on subscription to carer membership confirmation page
@@ -729,7 +722,9 @@ function cr_field_widget_form_alter(&$element, &$form_state, $context) {
   }
 }
 
-
+function cr_commerce_checkout_page_info_alter(&$checkout_pages) {
+  $checkout_pages['review']['submit_value'] = 'Make Payment';
+}
 
 /**
  * Implements hook_init().

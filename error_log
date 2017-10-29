@@ -193,3 +193,19 @@
 [25-Jun-2017 13:32:34 Europe/London] PHP  13. module_load_all() /home/carersregisterco/dev.carersregister.co.uk/includes/common.inc:5274
 [25-Jun-2017 13:32:34 Europe/London] PHP  14. drupal_load() /home/carersregisterco/dev.carersregister.co.uk/includes/module.inc:24
 [25-Jun-2017 13:32:34 Europe/London] PHP  15. include_once() /home/carersregisterco/dev.carersregister.co.uk/includes/bootstrap.inc:1369
+[05-Sep-2017 12:41:40 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:41:40 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[05-Sep-2017 12:42:09 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:42:09 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[05-Sep-2017 12:44:38 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:44:38 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[05-Sep-2017 12:44:39 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:44:39 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[05-Sep-2017 12:45:05 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:45:05 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[05-Sep-2017 12:45:07 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:45:07 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[05-Sep-2017 12:45:12 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:45:12 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[05-Sep-2017 12:45:17 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[05-Sep-2017 12:45:17 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0

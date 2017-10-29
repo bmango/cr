@@ -7706,6 +7706,9 @@ body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
+.main-container {
+  padding-bottom: 30px;
+}
 @media (max-width: 480px) {
   body {
     font-size: 1.7em;
@@ -7896,11 +7899,13 @@ fieldset.captcha {
   margin-top: -30px;
 }
 .page-employer .guide-box#g1:after,
-.page-node-add-job .guide-box#g2:after {
+.page-cart .guide-box#g2:after,
+.page-checkout .guide-box#g2:after {
   border-left-color: #fff;
 }
 .page-employer .guide-box#g1,
-.page-checkout .guide-box#g3 {
+.page-checkout .guide-box#g2,
+.page-cart .guide-box#g2 {
   background-color: #fff;
 }
 .page-node-add-job .guide-box#g3 {
@@ -11311,5 +11316,23 @@ fieldset[disabled] #block-ajax-contact-contact-form button.form-submit.focus {
 }
 .panel:last-child {
   margin-bottom: 25px;
+}
+.employer-membership .views-row {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  .employer-membership .views-row {
+    float: left;
+    width: 33.33333333%;
+  }
+}
+.employer-membership .views-row .views-row-inner {
+  padding: 10px 12px;
+  border: 1px solid #eee;
+  margin: 0 0;
+  border-radius: 6px;
 }
 /*# sourceMappingURL=style.css.map */

@@ -13,6 +13,10 @@ body {
 	//font-size:15px;
 }
 
+.main-container {
+	padding-bottom: 30px;
+}
+
 @media (max-width: @screen-phone) {
 	body {
 		font-size: 1.7em;
@@ -233,11 +237,11 @@ fieldset.captcha {
 		margin-top: -30px;
 	}
 
-	.page-employer &#g1:after, .page-node-add-job &#g2:after {
+	.page-employer &#g1:after, .page-cart &#g2:after, .page-checkout &#g2:after {
 		border-left-color:#fff;
 	}
 
-	.page-employer &#g1, .page-checkout &#g3 {
+	.page-employer &#g1, .page-checkout &#g2, .page-cart &#g2 {
 		background-color: #fff;
 	}
 	
@@ -2147,4 +2151,17 @@ div.title-wrapper {
 
 .panel:last-child {
 	margin-bottom: 25px;
+}
+
+.employer-membership {
+	.views-row {
+		.make-md-column(4);
+
+		.views-row-inner {
+			padding: 10px 12px;
+			border: 1px solid #eee;
+			margin: 0 0;
+			border-radius: 6px;
+		}
+	}
 }
