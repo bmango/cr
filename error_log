@@ -209,3 +209,7 @@
 [05-Sep-2017 12:45:12 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
 [05-Sep-2017 12:45:17 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
 [05-Sep-2017 12:45:17 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[30-Oct-2017 14:24:01 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[30-Oct-2017 14:24:01 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[30-Oct-2017 14:24:18 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[30-Oct-2017 14:24:18 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
