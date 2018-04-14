@@ -2,23 +2,5 @@
 sites/*/settings*.php
 
 # Ignore paths that contain user-generated content.
-sites/*/files/*
+sites/*/files
 sites/*/private
-sites/*/node_modules
-sites/all/themes/cr/node_modules
-!sites/*/files/config
-node_modules
-_notes
-dwsync.xml
-*dwsync.xml
-workspace.xml
-.idea/*
-*.tar.gz
-.htaccess
-robots.txt
-gulpfile.js
-package.json
-php.ini
-BingSiteAuth.xml
-.ftpquota
-info.php

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AlipayAccount.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Account.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="ApiRequestor.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="ApiResource.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="ApiResponse.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="ApplicationFee.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="ApplicationFeeRefund.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="AttachedObject.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Balance.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="BalanceTransaction.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="BankAccount.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="BitcoinReceiver.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="BitcoinTransaction.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Card.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Charge.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Collection.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="CountrySpec.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Coupon.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Customer.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Dispute.php" server="u56392646.1and1-data.host/carerregister/" local="131079562450000000" remote="131079562450000000" Dst="2" />
+<file name="Event.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="ExternalAccount.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="FileUpload.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Invoice.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="InvoiceItem.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="JsonSerializable.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Order.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Plan.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Product.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Recipient.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Refund.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="SingletonApiResource.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="SKU.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Stripe.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="StripeObject.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Subscription.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Token.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="Transfer.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+<file name="TransferReversal.php" server="u56392646.1and1-data.host/carerregister/" local="131079562460000000" remote="131079562460000000" Dst="2" />
+</dwsync>
