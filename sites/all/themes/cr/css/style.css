@@ -7556,7 +7556,7 @@ body.navbar-tray-open.navbar-vertical.navbar-fixed {
 @media (min-width: 480px) {
   .flag-style {
     float: right;
-    margin: 0 20px 0 0;
+    margin: 0 10px 0 0;
     clear: none;
   }
 }
@@ -7706,9 +7706,6 @@ body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
-.main-container {
-  padding-bottom: 30px;
-}
 @media (max-width: 480px) {
   body {
     font-size: 1.7em;
@@ -7768,6 +7765,9 @@ li {
 }
 .well p:last-child {
   margin-bottom: 0;
+}
+.well.carer {
+  background: #c7ddef;
 }
 .well-link {
   font-weight: 600;
@@ -7899,16 +7899,16 @@ fieldset.captcha {
   margin-top: -30px;
 }
 .page-employer .guide-box#g1:after,
-.page-cart .guide-box#g2:after,
-.page-checkout .guide-box#g2:after {
+.page-employer-membership .guide-box#g2:after,
+.page-checkout .guide-box#g2:after,
+.page-cart .guide-box#g2:after {
   border-left-color: #fff;
 }
 .page-employer .guide-box#g1,
 .page-checkout .guide-box#g2,
+.page-node-add-job .guide-box#g3,
+.page-employer-membership .guide-box#g2,
 .page-cart .guide-box#g2 {
-  background-color: #fff;
-}
-.page-node-add-job .guide-box#g3 {
   background-color: #fff;
 }
 .guide-box:before {
@@ -8310,7 +8310,8 @@ fieldset.captcha {
 @media (min-width: 480px) {
   .page-profile-carer .field.field-name-field-image {
     float: right;
-    padding: 10px 10px 10px 30px;
+    padding: 10px 5px 10px 5px;
+    max-width: 170px;
   }
 }
 .page-profile-carer .field.field-name-field-image .field-items {
@@ -8329,6 +8330,7 @@ fieldset.captcha {
 }
 .page-profile-carer .field.field-name-field-description .field-items {
   margin: 0;
+  white-space: pre-line;
 }
 @media (max-width: 768px) {
   .page-profile-carer .field.field-name-field-description {
@@ -8578,7 +8580,7 @@ fieldset[disabled] .node-type-job.page-node-edit #job-node-form button#edit-unpu
   .node-type-job .view-mode-job_details_agency_ .flag-outer,
   .node-type-job .view-mode-job_details_agency_view .flag-outer {
     float: right;
-    margin: 0 20px 0 0;
+    margin: 0 10px 0 0;
     clear: none;
   }
 }
@@ -9069,7 +9071,6 @@ ul.tabs--primary {
   }
 }
 .carer-list .views-row > div {
-  padding: 8px;
   box-sizing: border-box;
 }
 .carer-list .views-row .views-field {
@@ -9089,7 +9090,7 @@ ul.tabs--primary {
   float: left;
   clear: none;
   font-size: 110%;
-  margin: 3px 0 0 15px;
+  margin: 3px 0 0 8px;
 }
 .jobs-list.carer-list .views-row .views-field.views-field-field-district {
   margin: 0 0 1em;
@@ -9180,7 +9181,7 @@ ul.tabs--primary {
 }
 .carer-list .views-row .group-top-bar {
   background: #fde0e2;
-  margin: -15px -15px 0;
+  margin: -15px -15px 14px;
   border-bottom: 1px solid #ccc;
   padding: 8px 15px 8px;
   border-top-left-radius: 8px;
@@ -9199,7 +9200,7 @@ ul.tabs--primary {
 .carer-list .views-row .group-top-bar .views-field-nothing-2 {
   float: right;
   clear: none;
-  margin: 0 0 0 15px;
+  margin: 0 0 0 0;
 }
 .carer-list .views-row .group-top-bar .views-field-nothing-1 span,
 .carer-list .views-row .group-top-bar .views-field-path span,
@@ -9218,7 +9219,7 @@ ul.tabs--primary {
 @media (min-width: 480px) {
   .carer-list .views-row .group-top-bar .views-field-ops {
     float: right;
-    margin: 0 20px 0 0;
+    margin: 0 10px 0 0;
     clear: none;
   }
 }
@@ -9538,12 +9539,13 @@ fieldset[disabled] .carer-list .view-filters .views-exposed-widget.views-reset-b
 }
 .view-mode-carer_details_employer .field-name-employer-carers-links {
   float: left;
+  margin: 0;
 }
 .role-agency .view-mode-carer_details_employer .field-name-employer-carers-links {
   display: none;
 }
 .view-mode-carer_details_employer .field-name-employer-carers-links .field-items {
-  margin: 15px 0;
+  margin: 0 0 5px;
 }
 .view-mode-carer_details_employer fieldset {
   clear: both;
@@ -9606,7 +9608,7 @@ fieldset[disabled] .carer-list .view-filters .views-exposed-widget.views-reset-b
   .view-mode-carer_details_employer .group-personal h4 .flag-outer,
   .view-mode-carer_details_employer .group-personal .group-top .flag-outer {
     float: right;
-    margin: 0 20px 0 0;
+    margin: 0 10px 0 0;
     clear: none;
   }
 }
@@ -11317,22 +11319,64 @@ fieldset[disabled] #block-ajax-contact-contact-form button.form-submit.focus {
 .panel:last-child {
   margin-bottom: 25px;
 }
-.employer-membership .views-row {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
+button[type=submit] {
+  margin-bottom: 20px;
 }
-@media (min-width: 992px) {
-  .employer-membership .views-row {
-    float: left;
-    width: 33.33333333%;
-  }
+.page-employer-membership button.form-submit {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
 }
-.employer-membership .views-row .views-row-inner {
-  padding: 10px 12px;
-  border: 1px solid #eee;
-  margin: 0 0;
-  border-radius: 6px;
+.page-employer-membership button.form-submit:focus,
+.page-employer-membership button.form-submit.focus {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #255625;
+}
+.page-employer-membership button.form-submit:hover {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+.page-employer-membership button.form-submit:active,
+.page-employer-membership button.form-submit.active,
+.open > .dropdown-toggle.page-employer-membership button.form-submit {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+.page-employer-membership button.form-submit:active:hover,
+.page-employer-membership button.form-submit.active:hover,
+.open > .dropdown-toggle.page-employer-membership button.form-submit:hover,
+.page-employer-membership button.form-submit:active:focus,
+.page-employer-membership button.form-submit.active:focus,
+.open > .dropdown-toggle.page-employer-membership button.form-submit:focus,
+.page-employer-membership button.form-submit:active.focus,
+.page-employer-membership button.form-submit.active.focus,
+.open > .dropdown-toggle.page-employer-membership button.form-submit.focus {
+  color: #fff;
+  background-color: #398439;
+  border-color: #255625;
+}
+.page-employer-membership button.form-submit:active,
+.page-employer-membership button.form-submit.active,
+.open > .dropdown-toggle.page-employer-membership button.form-submit {
+  background-image: none;
+}
+.page-employer-membership button.form-submit.disabled:hover,
+.page-employer-membership button.form-submit[disabled]:hover,
+fieldset[disabled] .page-employer-membership button.form-submit:hover,
+.page-employer-membership button.form-submit.disabled:focus,
+.page-employer-membership button.form-submit[disabled]:focus,
+fieldset[disabled] .page-employer-membership button.form-submit:focus,
+.page-employer-membership button.form-submit.disabled.focus,
+.page-employer-membership button.form-submit[disabled].focus,
+fieldset[disabled] .page-employer-membership button.form-submit.focus {
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.page-employer-membership button.form-submit .badge {
+  color: #5cb85c;
+  background-color: #fff;
 }
 /*# sourceMappingURL=style.css.map */

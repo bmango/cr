@@ -6,15 +6,14 @@
 
 @import 'mixins';
 
+@blue: #337ab7;
+
+
 body {
 	//background:#666;
 	font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height:1.5; 
 	//font-size:15px;
-}
-
-.main-container {
-	padding-bottom: 30px;
 }
 
 @media (max-width: @screen-phone) {
@@ -85,10 +84,10 @@ li {
 	p:last-child {
 		margin-bottom: 0;
 	}
+}
 
-  //background:darken(@main-brand, 1%);
-  //color:#fff;
-  
+.well.carer {
+	background: lighten(@blue, 40%);
 }
 
 .well-link {
@@ -237,16 +236,19 @@ fieldset.captcha {
 		margin-top: -30px;
 	}
 
-	.page-employer &#g1:after, .page-cart &#g2:after, .page-checkout &#g2:after {
+	.page-employer &#g1:after,
+	.page-employer-membership &#g2:after,
+	.page-checkout &#g2:after,
+	.page-cart &#g2:after {
 		border-left-color:#fff;
 	}
 
-	.page-employer &#g1, .page-checkout &#g2, .page-cart &#g2 {
+	.page-employer &#g1,
+	.page-checkout &#g2,
+	.page-node-add-job &#g3,
+	.page-employer-membership &#g2,
+	.page-cart &#g2 {
 		background-color: #fff;
-	}
-	
-	.page-node-add-job &#g3 {
-		background-color:#fff;
 	}
 
 	&:before {
@@ -566,7 +568,8 @@ fieldset.captcha {
 		&.field-name-field-image {
 			@media (min-width: @screen-phone) {
 				float: right;
-				padding: 10px 10px 10px 30px;
+				padding: 10px 5px 10px 5px;
+				max-width: 170px;
 			}
 
 			.field-items {
@@ -588,6 +591,7 @@ fieldset.captcha {
 
 			.field-items {
 				margin: 0;
+				white-space: pre-line;
 			}
 
 			@media (max-width: @screen-tablet) {
@@ -952,7 +956,6 @@ ul.tabs--primary {
 				
 		> div {
 			//border:1px solid #999;
-			padding:8px;
 			box-sizing:border-box;
 		}
 		
@@ -975,7 +978,7 @@ ul.tabs--primary {
 				float: left;
 				clear: none;
 				font-size: 110%;
-				margin: 3px 0 0 15px;
+				margin: 3px 0 0 8px;
 
 				.jobs-list& {
 					margin: 0 0 1em;
@@ -1079,7 +1082,7 @@ ul.tabs--primary {
 		
 		.group-top-bar {
 			background:@light-pink;
-			margin:-15px -15px 0;
+			margin:-15px -15px 14px;
 			border-bottom:1px solid #ccc;
 			padding:8px 15px 8px;
 			border-top-left-radius:8px;
@@ -1098,7 +1101,7 @@ ul.tabs--primary {
 			& .views-field-nothing-1, .views-field-path, .views-field-nothing-2 {
 				float:right;
 				clear:none;
-				margin:0 0 0 15px; 
+				margin:0 0 0 0;
 				
 				span {
 					text-align:right;
@@ -1329,13 +1332,14 @@ ul.tabs--primary {
 .view-mode-carer_details_employer {
 	.field-name-employer-carers-links {
 		float:left;
+		margin: 0;
 
 		.role-agency & {
 			display: none;
 		}
 		
 		.field-items {
-			margin:15px 0;
+			margin: 0 0 5px;
 		} 
 	}
 		
@@ -2153,15 +2157,13 @@ div.title-wrapper {
 	margin-bottom: 25px;
 }
 
-.employer-membership {
-	.views-row {
-		.make-md-column(4);
+button[type=submit] {
+	margin-bottom: 20px;
+}
 
-		.views-row-inner {
-			padding: 10px 12px;
-			border: 1px solid #eee;
-			margin: 0 0;
-			border-radius: 6px;
-		}
+
+.page-employer-membership {
+	button.form-submit {
+		.btn-success;
 	}
 }

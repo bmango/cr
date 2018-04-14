@@ -5,9 +5,9 @@ dependencies[] = commerce
 dependencies[] = commerce_payment
 core = 7.x
 
-; Information added by Drupal.org packaging script on 2016-04-06
-version = "7.x-1.13"
+; Information added by Drupal.org packaging script on 2017-10-27
+version = "7.x-1.13+38-dev"
 core = "7.x"
 project = "commerce"
-datestamp = "1459956613"
+datestamp = "1509140289"
 
