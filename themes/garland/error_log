@@ -1,0 +1,6 @@
+[02-May-2018 16:25:55 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[02-May-2018 16:25:55 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[02-May-2018 16:26:41 UTC] PHP Warning:  Xdebug MUST be loaded as a Zend extension in Unknown on line 0
+[02-May-2018 16:26:41 UTC] PHP Warning:  Module 'xdebug' already loaded in Unknown on line 0
+[02-May-2018 16:27:46 UTC] PHP Fatal error:  Maximum execution time of 60 seconds exceeded in Unknown on line 0
+[02-May-2018 16:28:16 UTC] PHP Fatal error:  Maximum execution time of 60 seconds exceeded in Unknown on line 0
