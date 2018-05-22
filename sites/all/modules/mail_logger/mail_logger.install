@@ -26,8 +26,8 @@ function mail_logger_schema() {
       ),
       'mailto'        => array(
         'description'   => 'to whom this mail is going',
-        'type'          => 'varchar',
-        'length'        => 2047,
+        'type'          => 'text',
+        'size'          => 'medium',    /* up to 16MB */
         'not null'      => TRUE,
       ),
       'subject'       => array(
@@ -249,4 +249,22 @@ function mail_logger_update_7005() {
     ),
     array('subject' => array(array('subject', 20)))
   );
+}
+
+/**
+ * Expand 'mailto' column.
+ */
+function mail_logger_update_7006() {
+  db_drop_index('mail_logger', 'mailto');
+  db_change_field('mail_logger', 'mailto', 'mailto',
+    array(
+      'description' => 'to whom this mail is going',
+      'type' => 'text',
+      'size' => 'medium',
+      'not null' => TRUE,
+      ),
+    array('mailto' => array(array('mailto', 200)))
+    );
+
+  return t('The Mail_logger "mailto" column has been expanded.');
 }

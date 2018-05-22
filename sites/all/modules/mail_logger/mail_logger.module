@@ -80,6 +80,20 @@ function mail_logger_theme() {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ * Force our mail_alter to go last so everyone else gets a crack at the mail
+ * before we try to log it.
+ */
+function mail_logger_module_implements_alter(&$implementations, $hook) {
+  // Fire our mail_alter last.
+  if ($hook == 'mail_alter' && isset($implementations['mail_logger'])) {
+    $group = $implementations['mail_logger'];
+    unset($implementations['mail_logger']);
+    $implementations['mail_logger'] = $group;
+  }
+}
+
+/**
  * Implements hook_mail_alter().
  *
  * Purpose of this function is to log all outgoing mail
@@ -109,7 +123,9 @@ function mail_logger_mail_alter(&$message) {
       'mailkey'     => $logger['id'],
       'mailto'      => $logger['to'],
       'subject'     => $logger['subject'],
-      'body'        => $logger['body'],
+      'body'        => (variable_get('mail_logger_log_mail_body', TRUE) ?
+        $logger['body'] :
+        t(variable_get('mail_logger_log_exclude_text', '[MESSAGE BODY EXCLUDED]'))),
       'mailfrom'    => $logger['from'],
       'headers'     => serialize($logger['headers']),
       'date_sent'   => $logger['date_sent'],
@@ -119,6 +135,10 @@ function mail_logger_mail_alter(&$message) {
       );
 
     $db_specs = drupal_get_schema('mail_logger');
+
+    // Allow record to be altered.
+    $context = array('operation' => 'write');
+    drupal_alter('mail_logger_record', $record, $context);
 
     foreach ($record as $field_name => $value) {
       if (isset($db_specs[$field_name]['length'])) {
@@ -293,6 +313,11 @@ function mail_logger_load($id) {
     ->execute()
     ->fetchObject();
   if ($mail) {
+
+    // Alter encrypted mail log records back to their original state.
+    $context = array('operation' => 'read');
+    drupal_alter('mail_logger_record', $mail, $context);
+
     $mail->headers = unserialize($mail->headers);
     return $mail;
   }

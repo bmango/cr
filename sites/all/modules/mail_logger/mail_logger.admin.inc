@@ -64,6 +64,30 @@ function mail_logger_admin_settings_form($form, &$form_state) {
     '#description' => t('This will be used when there are no recipients in the "To" field.'),
     );
 
+  $form['mail_logger_log_mail_body'] = array(
+    '#type' => 'radios',
+    '#options' => array(t('No'), t('Yes')),
+    '#title' => t('Log the body of the mail.'),
+    '#default_value' => variable_get('mail_logger_log_mail_body', 1),
+    '#description' => t('This determines whether or not to include the body of the email in the log.')
+      . ' '
+      . t('Some sites, for security or privacy considerations, may elect to not rexord the body.'),
+    '#attributes' => array('class' => array('container-inline')),
+    );
+
+  $form['mail_logger_log_exclude_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Text to replace the body'),
+    '#default_value' => variable_get('mail_logger_log_exclude_text', '[MESSAGE BODY EXCLUDED]'),
+    '#description' => t('This text will be placed in the body area when lgging the email.'),
+    '#states' => array(
+      // Only show when previous field is "No".
+      'visible' => array(
+        ':input[name="mail_logger_log_mail_body"]' => array('value' => 0),
+        ),
+      ),
+    );
+
   $form = system_settings_form($form);
   return $form;
 }
